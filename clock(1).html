@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<!-- flex布局，使时钟居中 -->
+<html lang="en" style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG时钟</title>
+    <style>
+    #clock {
+        width: 300px;
+        height: 300px;
+    }
+    .navbar {
+        overflow: hidden;
+        background-color: #333;
+        position:absolute;
+        top: 0;
+        width: 100%;
+    }
+    .navbar a {
+        float: left;
+        display: block;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+    .navbar a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+    .number {
+        font-family: Arial, sans-serif;
+        font-size: 20px;
+        text-anchor: middle;
+    }
+
+    #timeDisplay {
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
+
+    #timeInput {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    #timeInput input {
+        width: 50px;
+        text-align: center;
+        margin: 0 5px;
+    }
+
+    #setTimeButton {
+        margin-left: 10px;
+    }
+
+    #currentTimeButton {
+        margin-top: 10px;
+    }
+
+    #hour-hand, #minute-hand, #second-hand {
+        cursor: pointer;
+    }
+
+    #second-hand {
+        transition: transform 1s;
+    }
+
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="page1.html">Page 1</a>
+        <a href="page2.html">Page 2</a>
+        <a href="page3.html">Page 3</a>
+        <a href="page4.html">Page 4</a>
+    </div>
+    <svg id="clock">
+        <circle cx="150" cy="150" r="140" stroke="black" stroke-width="2" fill="lightblue" />
+        <line x1="150" y1="150" x2="150" y2="70" stroke="black" stroke-width="5" id="hour-hand" />
+        <line x1="150" y1="150" x2="150" y2="50" stroke="black" stroke-width="3" id="minute-hand" />
+        <line x1="150" y1="150" x2="150" y2="40" stroke="red" stroke-width="1" id="second-hand" />
+        
+        <circle cx="150" cy="150" r="4" stroke="black" stroke-width="2" fill="gray" />
+
+        <g id="numbers" transform="translate(150,150)">
+            <text x="0" y="-107" class="number">12</text>
+            <text x="115" y="7" class="number">3</text>
+            <text x="0" y="120" class="number">6</text>
+            <text x="-115" y="7" class="number">9</text>
+        </g>
+
+        <g id="ticks" transform="translate(150,150)">
+            <!-- 刻度线，每5分钟一个 -->
+            <line x1="0" y1="-120" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(30)" />
+            <line x1="0" y1="-120" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(60)" />
+            <line x1="0" y1="-125" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(90)" />
+            <line x1="0" y1="-120" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(120)" />
+            <line x1="0" y1="-120" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(150)" />
+            <line x1="0" y1="-125" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(180)" />
+            <line x1="0" y1="-120" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(210)" />
+            <line x1="0" y1="-120" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(240)" />
+            <line x1="0" y1="-125" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(270)" />
+            <line x1="0" y1="-120" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(300)" />
+            <line x1="0" y1="-120" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(330)" />
+            <line x1="0" y1="-125" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(360)" />
+        </g>
+
+    </svg>
+    <div id="timeDisplay"></div> <!-- 添加显示时间的方框 -->
+    <div id="timeInput">
+        <input type="number" id="hourInput" min="0" max="23" placeholder="HH">
+        <input type="number" id="minuteInput" min="0" max="59" placeholder="MM">
+        <input type="number" id="secondInput" min="0" max="59" placeholder="SS">
+        <button id="setTimeButton">设置时间</button>
+        <button id="getCurrentTimeButton">恢复当前时间</button>
+    </div>
+
+    <script>
+        var clockInterval;
+        var userSetHours = 0;
+        var userSetMinutes = 0;
+        var userSetSeconds = 0;
+    
+        function updateClock(hours, minutes, seconds) {
+            userSetHours = hours;
+            userSetMinutes = minutes;
+            userSetSeconds = seconds;
+    
+            var hourHand = document.getElementById('hour-hand');
+            var minuteHand = document.getElementById('minute-hand');
+            var secondHand = document.getElementById('second-hand');
+    
+            var hourDeg = (360 / 12) * (userSetHours % 12) + (360 / 12) * (userSetMinutes / 60);
+            var minuteDeg = (360 / 60) * userSetMinutes;
+            var secondDeg = (360 / 60) * userSetSeconds;
+    
+            hourHand.setAttribute('transform', `rotate(${hourDeg}, 150, 150)`);
+            minuteHand.setAttribute('transform', `rotate(${minuteDeg}, 150, 150)`);
+
+            if (userSetSeconds === 0) {
+                secondHand.setAttribute('transform', `rotate(360, 150, 150)`);
+                setTimeout(() => {
+                    secondHand.style.transition = 'none'; // 禁用过渡效果
+                    secondHand.setAttribute('transform', `rotate(0, 150, 150)`);
+                }, 900); 
+                setTimeout(() => {
+                    secondHand.style.transition = ''; // 恢复过渡效果
+                }, 950); 
+                
+            }
+            else {
+                secondHand.setAttribute('transform', `rotate(${secondDeg}, 150, 150)`);
+            }
+    
+            var timeDisplay = document.getElementById('timeDisplay');
+            var formattedTime = `${userSetHours.toString().padStart(2, '0')}:${userSetMinutes.toString().padStart(2, '0')}:${userSetSeconds.toString().padStart(2, '0')}`;
+            timeDisplay.textContent = formattedTime;
+        }
+    
+        function startClock() {
+            // 停止当前的时钟更新
+            clearInterval(clockInterval);
+    
+            // 每秒更新一次时钟
+            clockInterval = setInterval(function() {
+                userSetSeconds++;
+                if (userSetSeconds === 60) {
+                    userSetSeconds = 0;
+                    userSetMinutes++;
+                    if (userSetMinutes === 60) {
+                        userSetMinutes = 0;
+                        userSetHours++;
+                        if (userSetHours === 24) {
+                            userSetHours = 0;
+                        }
+                    }
+                }
+                updateClock(userSetHours, userSetMinutes, userSetSeconds);
+            }, 1000);
+        }
+    
+        // 初始加载时钟，显示当前时间
+        (function() {
+            var time = new Date();
+            var hours = time.getHours();
+            var minutes = time.getMinutes();
+            var seconds = time.getSeconds();
+            updateClock(hours, minutes, seconds);
+            startClock();
+        })();
+    
+        document.getElementById('setTimeButton').addEventListener('click', function() {
+            var hourInput = document.getElementById('hourInput');
+            var minuteInput = document.getElementById('minuteInput');
+            var secondInput = document.getElementById('secondInput');
+
+            var hours = parseInt(hourInput.value) || 0;
+            var minutes = parseInt(minuteInput.value) || 0;
+            var seconds = parseInt(secondInput.value) || 0;
+
+            // 验证时间输入是否合理
+            if (isNaN(hours) || hours < 0 || hours > 23 ||
+                isNaN(minutes) || minutes < 0 || minutes > 59 ||
+                isNaN(seconds) || seconds < 0 || seconds > 59) {
+                alert('时间设置不对，请重新输入');
+                return;
+            }
+
+            // 从用户设置的时间开始时钟
+            updateClock(hours, minutes, seconds);
+            startClock();
+        });
+
+        document.getElementById('getCurrentTimeButton').addEventListener('click', function() {
+            // 获取当前时间并显示
+            var time = new Date();
+            var hours = time.getHours();
+            var minutes = time.getMinutes();
+            var seconds = time.getSeconds();
+
+            updateClock(hours, minutes, seconds);
+            startClock();
+        });
+
+
+
+
+        // 鼠标拖动事件
+        document.getElementById('hour-hand').addEventListener('mousedown', handleMouseDown);
+        document.getElementById('minute-hand').addEventListener('mousedown', handleMouseDown);
+        document.getElementById('second-hand').addEventListener('mousedown', handleMouseDown);
+
+        function handleMouseDown(event) {
+            var element = event.target;
+            var startAngle = getAngle(element);
+            var startX = event.clientX;
+            var startY = event.clientY;
+
+            function moveHandler(event) {
+                var angle = getAngle(element, event.clientX, event.clientY);
+                var delta = angle - startAngle;
+                updateTime(element, delta);
+            }
+
+            function upHandler() {
+                document.removeEventListener('mousemove', moveHandler);
+                document.removeEventListener('mouseup', upHandler);
+            }
+
+            document.addEventListener('mousemove', moveHandler);
+            document.addEventListener('mouseup', upHandler);
+        }
+
+        function getAngle(element, x, y) {
+            var centerX = 150;
+            var centerY = 150;
+            var radius = 140;
+            var angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
+            return angle;
+        }
+
+        function updateTime(element, angle) {
+            var hours = 0;
+            var minutes = 0;
+            var seconds = 0;
+
+            if (element.id === 'hour-hand') {
+                hours = Math.floor(angle / 30);
+            } else if (element.id === 'minute-hand') {
+                minutes = Math.floor(angle / 6);
+            } else if (element.id === 'second-hand') {
+                seconds = Math.floor(angle / 6);
+            }
+
+            // 更新时钟
+            updateClock(hours, minutes, seconds);
+
+            // 更新时间显示
+            var timeDisplay = document.getElementById('timeDisplay');
+            timeDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+
+
+    </script>
+    
+    
+</body>
+
+</html>

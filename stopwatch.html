@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <title>秒表</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        #stopwatch {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 100px;
+            height: 50px;
+            margin: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="stopwatch">00:00:00.000</div>
+    <button id="toggle">开始</button>
+    <button id="reset">复位</button>
+
+    <script>
+        let startTime;
+        let elapsedTime = 0;
+        let timerInterval;
+        let running = false;
+
+        function timeToString(time) {
+            let diffInHrs = time / 3600000;
+            let hh = Math.floor(diffInHrs);
+
+            let diffInMin = (diffInHrs - hh) * 60;
+            let mm = Math.floor(diffInMin);
+
+            let diffInSec = (diffInMin - mm) * 60;
+            let ss = Math.floor(diffInSec);
+
+            let diffInMs = (diffInSec - ss) * 1000;
+            let ms = Math.floor(diffInMs);
+
+            let formattedHH = hh.toString().padStart(2, "0");
+            let formattedMM = mm.toString().padStart(2, "0");
+            let formattedSS = ss.toString().padStart(2, "0");
+            let formattedMS = ms.toString().padStart(3, "0");
+
+            return `${formattedHH}:${formattedMM}:${formattedSS}.${formattedMS}`;
+        }
+
+        function print(txt) {
+            document.getElementById("stopwatch").innerHTML = txt;
+        }
+
+        function start() {
+            startTime = Date.now() - elapsedTime;
+            timerInterval = requestAnimationFrame(updateTimer);
+            running = true;
+            document.getElementById("toggle").textContent = "暂停";
+        }
+
+        function pause() {
+            elapsedTime = Date.now() - startTime;
+            cancelAnimationFrame(timerInterval);
+            running = false;
+            document.getElementById("toggle").textContent = "开始";
+        }
+
+        function reset() {
+            clearInterval(timerInterval);
+            print("00:00:00.000");
+            elapsedTime = 0;
+            running = false;
+            document.getElementById("toggle").textContent = "开始";
+        }
+
+        function updateTimer() {
+            elapsedTime = Date.now() - startTime;
+            print(timeToString(elapsedTime));
+            timerInterval = requestAnimationFrame(updateTimer);
+        }
+
+        document.getElementById("reset").addEventListener("click", function () {
+            // 停止当前的计时器（如果有的话）
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            // 重置 elapsedTime 和显示
+            elapsedTime = 0;
+            print(timeToString(elapsedTime));
+            // 重置 running 状态，以便可以重新开始或暂停
+            running = false;
+            // 更新开始/暂停按钮的文本，因为我们已经复位了计时器
+            document.getElementById("toggle").textContent = "开始";
+        });
+
+        document.getElementById("toggle").addEventListener("click", function () {
+            if (!running) {
+                // 如果当前未运行，则开始计时
+                startTime = Date.now() - elapsedTime;
+                timerInterval = setInterval(function () {
+                    elapsedTime = Date.now() - startTime;
+                    print(timeToString(elapsedTime));
+                }, 10);
+                running = true;
+                this.textContent = "暂停";
+            } else {
+                // 如果当前正在运行，则暂停计时
+                clearInterval(timerInterval);
+                running = false;
+                this.textContent = "开始";
+            }
+        });
+    </script>
+</body>
+
+</html>
