@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>世界时钟 World Clock</title>
+    <link rel="stylesheet" href="css/navbar.css">
+    <style>
+        body {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .worldClock {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        .top {
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
+        .dial {
+            margin-top: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .clockContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 250px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+        }
+        .timeDisplay {
+            font-size: 24px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: white;
+        }
+        .timezoneSelect {
+            font-size: 12px;
+            margin-bottom: 8px;
+            padding: 3px;
+            width: 100%;
+        }
+        .locationDisplay {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top">
+        <div class="navbar">
+            <div class="navbar_inner">
+                <a href="index.html">世界时钟</a>
+                <a href="htmls/alarm/alarm.html">闹钟</a>
+                <a href="htmls/stopwatch/stopwatch.html">计时器</a>
+                <a href="htmls/timer/timer.html">秒表</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dial">        
+        <iframe 
+            width="400" 
+            height="400" 
+            frameborder="no" 
+            marginwidth="0" 
+            marginheight="0" 
+            src="htmls//main_clock//clock.html">
+        </iframe>
+    </div>
+
+    <!-- World Clock -->
+    <div class="worldClock">
+        <div class="clockContainer">
+            <div class="locationDisplay"></div>
+            <select class="timezoneSelect"></select>
+            <div class="timeDisplay"></div>
+        </div>
+        <div class="clockContainer">
+            <div class="locationDisplay"></div>
+            <select class="timezoneSelect"></select>
+            <div class="timeDisplay"></div>
+        </div>
+        <div class="clockContainer">
+            <div class="locationDisplay"></div>
+            <select class="timezoneSelect"></select>
+            <div class="timeDisplay"></div>
+        </div>
+        <div class="clockContainer">
+            <div class="locationDisplay"></div>
+            <select class="timezoneSelect"></select>
+            <div class="timeDisplay"></div>
+        </div>
+    </div>
+    <script>
+        const timezones = [
+            { value: '-12', label: 'UTC-12:00', location: '贝克岛' },
+            { value: '-11', label: 'UTC-11:00', location: '中途岛' },
+            { value: '-11', label: 'UTC-11:00', location: '美属萨摩亚' },
+            { value: '-10', label: 'UTC-10:00', location: '夏威夷' },
+            { value: '-10', label: 'UTC-10:00', location: '塔希提岛' },
+            { value: '-9', label: 'UTC-09:00', location: '阿拉斯加' },
+            { value: '-8', label: 'UTC-08:00', location: '洛杉矶' },
+            { value: '-8', label: 'UTC-08:00', location: '温哥华' },
+            { value: '-7', label: 'UTC-07:00', location: '丹佛' },
+            { value: '-7', label: 'UTC-07:00', location: '菲尼克斯' },
+            { value: '-6', label: 'UTC-06:00', location: '芝加哥' },
+            { value: '-6', label: 'UTC-06:00', location: '墨西哥城' },
+            { value: '-5', label: 'UTC-05:00', location: '纽约' },
+            { value: '-5', label: 'UTC-05:00', location: '华盛顿' },
+            { value: '-5', label: 'UTC-05:00', location: '多伦多' },
+            { value: '-5', label: 'UTC-05:00', location: '渥太华' },
+            { value: '-5', label: 'UTC-05:00', location: '巴拿马城' },
+            { value: '-4', label: 'UTC-04:00', location: '圣地亚哥' },
+            { value: '-4', label: 'UTC-04:00', location: '波哥大' },
+            { value: '-3', label: 'UTC-03:00', location: '布宜诺斯艾利斯' },
+            { value: '-3', label: 'UTC-03:00', location: '里约热内卢' },
+            { value: '-2', label: 'UTC-02:00', location: '南乔治亚岛' },
+            { value: '-1', label: 'UTC-01:00', location: '亚速尔群岛' },
+            { value: '0', label: 'UTC+00:00', location: '伦敦' },
+            { value: '0', label: 'UTC+00:00', location: '里斯本' },
+            { value: '1', label: 'UTC+01:00', location: '柏林' },
+            { value: '1', label: 'UTC+01:00', location: '巴黎' },
+            { value: '1', label: 'UTC+01:00', location: '波尔多' },
+            { value: '1', label: 'UTC+01:00', location: '直布罗陀' },
+            { value: '1', label: 'UTC+01:00', location: '罗马' },
+            { value: '1', label: 'UTC+01:00', location: '日内瓦' },
+            { value: '1', label: 'UTC+01:00', location: '华沙' },
+            { value: '1', label: 'UTC+01:00', location: '布拉迪斯拉发' },
+            { value: '1', label: 'UTC+01:00', location: '布拉格' },
+            { value: '1', label: 'UTC+01:00', location: '维也纳' },
+            { value: '1', label: 'UTC+01:00', location: '布达佩斯' },
+            { value: '2', label: 'UTC+02:00', location: '开罗' },
+            { value: '2', label: 'UTC+02:00', location: '雅典' },
+            { value: '2', label: 'UTC+02:00', location: '耶路撒冷' },
+            { value: '2', label: 'UTC+02:00', location: '布加勒斯特' },
+            { value: '2', label: 'UTC+02:00', location: '索菲亚' },
+            { value: '3', label: 'UTC+03:00', location: '莫斯科' },
+            { value: '3', label: 'UTC+03:00', location: '库尔斯克' },
+            { value: '3', label: 'UTC+03:00', location: '列宁格勒' },
+            { value: '3', label: 'UTC+03:00', location: '明斯克' },
+            { value: '3', label: 'UTC+03:00', location: '斯大林格勒' },
+            { value: '3', label: 'UTC+03:00', location: '德黑兰' },
+            { value: '4', label: 'UTC+04:00', location: '迪拜' },
+            { value: '5', label: 'UTC+05:00', location: '卡拉奇' },
+            { value: '6', label: 'UTC+06:00', location: '达卡' },
+            { value: '7', label: 'UTC+07:00', location: '曼谷' },
+            { value: '7', label: 'UTC+07:00', location: '雅加达' },
+            { value: '8', label: 'UTC+08:00', location: '北京' },
+            { value: '8', label: 'UTC+08:00', location: '上海' },
+            { value: '8', label: 'UTC+08:00', location: '香港' },
+            { value: '8', label: 'UTC+08:00', location: '广州' },
+            { value: '9', label: 'UTC+09:00', location: '东京' },
+            { value: '9', label: 'UTC+09:00', location: '大阪' },
+            { value: '9', label: 'UTC+09:00', location: '长崎' },
+            { value: '10', label: 'UTC+10:00', location: '悉尼' },
+            { value: '10', label: 'UTC+10:00', location: '布里斯班' },
+            { value: '10', label: 'UTC+10:00', location: '海参崴' },
+            { value: '11', label: 'UTC+11:00', location: '所罗门群岛' },
+            { value: '11', label: 'UTC+11:00', location: '新喀里多尼亚' },
+            { value: '12', label: 'UTC+12:00', location: '奥克兰' },
+            { value: '12', label: 'UTC+12:00', location: '威克岛' },
+            { value: '12', label: 'UTC+12:00', location: '斐济' },
+        ];
+
+
+        const defaultLocations = ['纽约', '伦敦', '莫斯科', '北京'];
+
+        function preset(selectElement, index) {
+            const locationDisplay = selectElement.previousElementSibling;
+            timezones.forEach(tz => {
+                const option = document.createElement('option');
+                option.value = tz.value;
+                option.textContent = `${tz.location} (${tz.label})`;
+                if (tz.location === defaultLocations[index]) {
+                    option.selected = true;
+                    locationDisplay.textContent = tz.location;
+                }
+                selectElement.appendChild(option);
+            });
+
+            selectElement.addEventListener('change', function() {
+                const selectedOption = selectElement.options[selectElement.selectedIndex];
+                locationDisplay.textContent = selectedOption.textContent.split(' ')[0];
+                updateClock(selectElement);
+            });
+        }
+
+        function updateClock(selectElement) {
+            const timeZoneOffset = parseInt(selectElement.value);
+            const now = new Date();
+            const utcNow = new Date(now.getTime() + (now.getTimezoneOffset() * 60000));
+            const timeZoneNow = new Date(utcNow.getTime() + (timeZoneOffset * 3600000));
+            const hours = timeZoneNow.getHours();
+            const minutes = timeZoneNow.getMinutes();
+            const seconds = timeZoneNow.getSeconds();
+            const milliseconds = timeZoneNow.getMilliseconds()
+
+            selectElement.nextElementSibling.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function initClocks() {
+            const timezoneSelects = document.querySelectorAll('.timezoneSelect');
+            timezoneSelects.forEach((select, index) => {
+                preset(select, index);
+                setInterval(() => updateClock(select), 1000);
+                updateClock(select);
+            });
+        }
+
+        initClocks();
+    </script>
+</body>
+</html>

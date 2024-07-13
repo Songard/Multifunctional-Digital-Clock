@@ -3,14 +3,28 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>秒表</title>
+    <title>秒表 Stopwatch</title>
+    <link rel="stylesheet" href="../../css/navbar.css">
     <style>
         body {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .stopwatch {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             flex-direction: column;
+        }
+        .top {
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
         }
 
         #stopwatch {
@@ -28,10 +42,21 @@
 </head>
 
 <body>
-    <div id="stopwatch">00:00:00.000</div>
-    <button id="toggle">开始</button>
-    <button id="reset">复位</button>
-
+    <div class="top">
+        <div class="navbar">
+            <div class="navbar_inner">
+                <a href="../../index.html">世界时钟</a>
+                <a href="../alarm/alarm.html">闹钟</a>
+                <a href="stopwatch.html">计时器</a>
+                <a href="../timer/timer.html">秒表</a>
+            </div>
+        </div>
+    </div>
+    <div class = "stopwatch">
+        <div id="stopwatch">00:00:00.000</div>
+        <button id="toggle">开始</button>
+        <button id="reset">复位</button>
+    </div>
     <script>
         let startTime;
         let elapsedTime = 0;
