@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="cn" style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+<html lang="cn"
+    style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,48 +9,47 @@
     <link rel="stylesheet" href="../../css/navbar.css">
 
     <style>
-    .body {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-    }
+        .body {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
 
-    .top {
-        display: flex;
-        justify-content: center;
-        position: fixed;
-        top: 0;
-        width: 100%;
-    }
+        .top {
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
 
-    .dial {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
+        .dial {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
 
-    .alarm {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
+        .alarm {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
 
-    .setAlarm {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: row;
-    }
-    
+        .setAlarm {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+        }
     </style>
-    
+
 </head>
 
-<body class = "body" id="bd">
-    
+<body class="body" id="bd">
+
     <div class="top">
         <div class="navbar">
             <div class="navbar_inner">
@@ -60,19 +61,13 @@
         </div>
     </div>
 
-    <div class="dial">        
-        <iframe 
-            id="dial"
-            width="400" 
-            height="400" 
-            frameborder="no" 
-            marginwidth="0" 
-            marginheight="0" 
+    <div class="dial">
+        <iframe id="dial" width="400" height="400" frameborder="no" marginwidth="0" marginheight="0"
             src="../main_clock/clock.html">
         </iframe>
     </div>
-    
-    <div class="alarm" >
+
+    <div class="alarm">
         <h2>设置闹钟</h2>
         <div id="setAlarm">
             <input id="alarmHours" type="number" placeholder="时" min="0" max="23">
@@ -80,6 +75,7 @@
             <!--<input id="alarmSeconds" type="number" placeholder="秒" min="0" max="59">-->
             <button onclick="setAlarm()">设置闹钟</button>
             <button id="cancelAlarm">取消闹钟</button>
+            <audio id="alarm-sound" src="alarm.mp3" preload="auto"></audio>
         </div>
     </div>
 
@@ -109,16 +105,18 @@
         }
 
         function checkAlarm() {
-            clockInterval = setInterval(function () {        
-                
+            clockInterval = setInterval(function () {
+
                 if (userSetHours >= alarmHour && userSetMinutes >= alarmMinute && userSetSeconds >= alarmSecond) {
                     console.log("时间到！");
-                    alert("时间到！");
+                    document.getElementById('alarm-sound').play(); // 播放音频
+                    alert("时间到！"); // 弹窗提示
+
                     clearInterval(clockInterval); // 停止检查
                 }
             }, 1000);
         }
-    
+
         document.getElementById('cancelAlarm').addEventListener('click', function () {
             clearInterval(clockInterval); // 停止定时器
             alarmHour = 0; // 可选：重置闹钟时间
@@ -126,7 +124,7 @@
             alarmSecond = 0; // 可选：重置闹钟时间
             alert("闹钟已取消！");
         });
-    
+
         // 由于使用iframe将表盘与页面分离，
         // 因此获取表盘时间改为使用postMessage进行页面间通信
         // 提取表盘iframe
@@ -146,7 +144,8 @@
             userSetSeconds = e.data.seconds;
             console.log("当前时间：" + userSetHours + ":" + userSetMinutes + ":" + userSetSeconds);
         });
-    
+
     </script>
 </body>
+
 </html>
