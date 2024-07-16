@@ -10,17 +10,21 @@
         align-items: center;
         flex-direction: column;
     }
+
+    /* 表盘大小 */
     #clock {
         width: 300px;
         height: 300px;
     }
     
+    /* 表盘上的刻度数字 */
     .number {
         font-family: Arial, sans-serif;
         font-size: 20px;
         text-anchor: middle;
     }
 
+    /* 数字时间显示 */
     #timeDisplay {
         font-family: Arial, sans-serif;
         font-size: 24px;
@@ -59,20 +63,23 @@
 </head>
 
 <body class = "body">
+    <!-- 利用SVG画图实现的表盘时钟，需注意中心点统一 -->
     <svg id="clock">
+        <!-- 表盘 -->
         <circle cx="150" cy="150" r="140" stroke="black" stroke-width="2" fill="lightblue" />
+        <!-- 时针，分针，秒针 -->
         <line x1="150" y1="150" x2="150" y2="70" stroke="black" stroke-width="5" id="hour-hand" />
         <line x1="150" y1="150" x2="150" y2="50" stroke="black" stroke-width="3" id="minute-hand" />
         <line x1="150" y1="150" x2="150" y2="40" stroke="red" stroke-width="1" id="second-hand" />
         <circle cx="150" cy="150" r="4" stroke="black" stroke-width="2" fill="gray" />
-
+        <!-- 表盘上的刻度数字 -->
         <g id="numbers" transform="translate(150,150)">
             <text x="0" y="-107" class="number">12</text>
             <text x="115" y="7" class="number">3</text>
             <text x="0" y="120" class="number">6</text>
             <text x="-115" y="7" class="number">9</text>
         </g>
-
+        <!-- 表盘上的刻度线 -->
         <g id="ticks" transform="translate(150,150)">
             <line x1="0" y1="-120" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(30)" />
             <line x1="0" y1="-120" x2="0" y2="-140" stroke="black" stroke-width="1" transform="rotate(60)" />
@@ -89,6 +96,7 @@
         </g>
 
     </svg>
+    <!-- 数字时间显示 -->
     <div id="timeDisplay"></div>
     <div id="timeInput">
         <input type="number" id="hourInput" min="0" max="23" placeholder="HH">
@@ -105,6 +113,7 @@
         var userSetSeconds = 0;
         var isPM = false;
 
+        // 更新时间函数，以输入的时分秒为参数进行设置，若没有输入则默认获取系统时间
         function updateClock(hours, minutes, seconds) {
             userSetHours = hours;
             userSetMinutes = minutes;
@@ -114,6 +123,7 @@
             var minuteHand = document.getElementById('minute-hand');
             var secondHand = document.getElementById('second-hand');
 
+            // 计算时分秒对应指针的角度
             var hourDeg = (360 / 12) * (userSetHours % 12) + (360 / 12) * (userSetMinutes / 60);
             var minuteDeg = (360 / 60) * userSetMinutes;
             var secondDeg = (360 / 60) * userSetSeconds;
@@ -122,15 +132,13 @@
             minuteHand.setAttribute('transform', `rotate(${minuteDeg}, 150, 150)`);
             secondHand.setAttribute('transform', `rotate(${secondDeg}, 150, 150)`);
 
-            
-
             var timeDisplay = document.getElementById('timeDisplay');
-
             
             var formattedTime = `${userSetHours.toString().padStart(2, '0')}:${userSetMinutes.toString().padStart(2, '0')}:${Math.floor(userSetSeconds).toString().padStart(2, '0')}`;
             timeDisplay.textContent = formattedTime;
         }
 
+        // 在有初始时间的基础上不断更新时间，为保证平滑更新周期为0.01s
         function startClock() {
             clearInterval(clockInterval);
             clockInterval = setInterval(function() {
@@ -150,6 +158,7 @@
             }, 10);
         }
 
+        // 初始化时钟，获取系统时间并显示
         (function() {
             var time = new Date();
             var hours = time.getHours();
@@ -160,6 +169,7 @@
             startClock();
         })();
 
+        //根据输入的时分秒设置时间
         document.getElementById('setTimeButton').addEventListener('click', function() {
             var hourInput = document.getElementById('hourInput');
             var minuteInput = document.getElementById('minuteInput');
@@ -168,7 +178,7 @@
             var hours = parseInt(hourInput.value) || 0;
             var minutes = parseInt(minuteInput.value) || 0;
             var seconds = parseInt(secondInput.value) || 0;
-
+            // 检查输入时间是否合法
             if (hours < 0 || hours >= 24 || minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60) {
                 alert('请输入正确的时间');
                 return;
