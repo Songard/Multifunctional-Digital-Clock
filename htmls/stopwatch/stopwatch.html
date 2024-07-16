@@ -12,6 +12,7 @@
             justify-content: center;
             flex-direction: column;
         }
+
         .stopwatch {
             display: flex;
             justify-content: center;
@@ -19,6 +20,7 @@
             height: 100vh;
             flex-direction: column;
         }
+
         .top {
             display: flex;
             justify-content: center;
@@ -30,6 +32,13 @@
         #stopwatch {
             font-size: 48px;
             margin-bottom: 20px;
+        }
+
+        #records {
+            font-size: 24px;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+
         }
 
         button {
@@ -52,16 +61,23 @@
             </div>
         </div>
     </div>
-    <div class = "stopwatch">
+    <div class="stopwatch">
         <div id="stopwatch">00:00:00.000</div>
+        <div id="records"></div>
         <button id="toggle">开始</button>
         <button id="reset">复位</button>
+        <button id="recordBtn" style="display: inline;">记录</button>
+
     </div>
+
     <script>
         let startTime;
         let elapsedTime = 0;
         let timerInterval;
         let running = false;
+        var recordsText = "";// 用于记录所有记录时间的字符串
+        let cnt_record = 0;// 记录记录的次数
+
 
         function timeToString(time) {
             let diffInHrs = time / 3600000;
@@ -92,7 +108,9 @@
             startTime = Date.now() - elapsedTime;
             timerInterval = requestAnimationFrame(updateTimer);
             running = true;
+
             document.getElementById("toggle").textContent = "暂停";
+
         }
 
         function pause() {
@@ -108,6 +126,9 @@
             elapsedTime = 0;
             running = false;
             document.getElementById("toggle").textContent = "开始";
+            recordsText = "";// 清除记录
+            document.getElementById("records").textContent = recordsText; // 更新固定框的内容
+            cnt_record = 0;
         }
 
         function updateTimer() {
@@ -128,6 +149,9 @@
             running = false;
             // 更新开始/暂停按钮的文本，因为我们已经复位了计时器
             document.getElementById("toggle").textContent = "开始";
+            recordsText = "";// 清除记录
+            document.getElementById("records").textContent = recordsText; // 更新固定框的内容
+            cnt_record = 0;
         });
 
         document.getElementById("toggle").addEventListener("click", function () {
@@ -145,6 +169,20 @@
                 clearInterval(timerInterval);
                 running = false;
                 this.textContent = "开始";
+            }
+        });
+        document.getElementById("recordBtn").addEventListener("click", function () {
+            if (!running) alert("计时器未运行，无法记录时间"); // 如果计时器未运行，则报错
+            else {
+                if (cnt_record >= 5) {
+                    alert("记录已满");
+                    return;
+                }
+                const currentTime = timeToString(elapsedTime);
+                var currentRecord = currentTime; // 或者是 currentTime 变量
+                recordsText += "\n" + currentRecord;// 将新记录添加到记录字符串中           
+                document.getElementById("records").textContent = recordsText; // 更新固定框的内容
+                cnt_record++;
             }
         });
     </script>
