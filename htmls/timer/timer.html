@@ -70,20 +70,26 @@
     <script>
         let countdown;
         let isRunning = false;
+        var time = 0;
 
         function startPauseTimer() {
             if (isRunning) {
                 clearInterval(countdown);
                 isRunning = false;
                 document.getElementById('startPause').textContent = '开始';
-            } else {
+            } 
+            else {
                 const hours = parseInt(document.getElementById('inputHours').value) || 0;
                 const minutes = parseInt(document.getElementById('inputMinutes').value) || 0;
                 const seconds = parseInt(document.getElementById('inputSeconds').value) || 0;
-                let time = hours * 3600 + minutes * 60 + seconds;
+                // 保证倒计时只在最开始设置时改变，暂停后不会重新设置倒计时
+                if (time === 0){
+                    time = hours * 3600 + minutes * 60 + seconds;
+                }
                 if (time > 0) {
                     isRunning = true;
                     document.getElementById('startPause').textContent = '暂停';
+                    updateTimerDisplay(time); // 最开始更新显示时间，否则最开始一秒会显示0
                     countdown = setInterval(() => {
                         time--;
                         updateTimerDisplay(time);
@@ -96,9 +102,13 @@
                         if (time <= 0) {
                             clearInterval(countdown);
                             document.getElementById('alarm-sound').play(); // 播放音频
-                            alert('时间到！');
                             document.getElementById('startPause').textContent = '开始';
                             isRunning = false;
+                            time = 0;
+                            timer.style.color = 'black'; // 将文本颜色恢复为黑色
+                            setTimeout(() => {
+                                alert('时间到！');
+                            }, 500); // 延迟500毫秒后执行alert，避免打断显示更新
                         }
                     }, 1000);
                 }
