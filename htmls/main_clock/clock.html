@@ -56,6 +56,36 @@
         margin-top: 10px;
     }
 
+    /* 日期显示 */
+    #dateDisplay {
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    #dateInput {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    #dateInput input {
+        width: 70px;
+        text-align: center;
+        margin: 0 5px;
+    }
+
+    #setDateButton {
+        margin-left: 10px;
+    }
+
+
     #hour-hand, #minute-hand, #second-hand {
         cursor: pointer;
     }
@@ -105,6 +135,18 @@
         <button id="setTimeButton">设置时间</button>
         <button id="getCurrentTimeButton">恢复当前时间</button>
     </div>
+    <!-- 日期显示 -->
+    <div id="dateDisplay"></div>
+    <div id="dateInput">
+        <input type="number" id="yearInput" min="1900" max="2100" placeholder="YYYY">
+        <input type="number" id="monthInput" min="1" max="12" placeholder="MM">
+        <input type="number" id="dayInput" min="1" max="31" placeholder="DD">
+        <button id="setDateButton">设置日期</button>
+    </div>
+    <!-- 错误信息显示 -->
+    <div id="errorMessage" style="color: red; margin-top: 10px;"></div>
+
+
 
     <script>
         var clockInterval;
@@ -112,6 +154,7 @@
         var userSetMinutes = 0;
         var userSetSeconds = 0;
         var isPM = false;
+        var userSetYear, userSetMonth, userSetDay;
 
         // 更新时间函数，以输入的时分秒为参数进行设置，若没有输入则默认获取系统时间
         function updateClock(hours, minutes, seconds) {
@@ -193,9 +236,87 @@
             var hours = time.getHours();
             var minutes = time.getMinutes();
             var seconds = time.getSeconds();
+            var year = time.getFullYear();
+            var month = time.getMonth() + 1;
+            var day = time.getDate();
 
             isPM = hours >= 12;
+            updateClockAndDate(hours, minutes, seconds, year, month, day);
+            startClock();
+        });
+
+        // 更新时间和日期函数（重置当前时间同时需要重置日期）
+        function updateClockAndDate(hours, minutes, seconds, year, month, day) {
             updateClock(hours, minutes, seconds);
+
+            userSetYear = year;
+            userSetMonth = month;
+            userSetDay = day;
+
+            var dateDisplay = document.getElementById('dateDisplay');
+            var formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+            dateDisplay.textContent = formattedDate;
+        }
+
+        // 初始化时钟和日期
+        (function() {
+            var time = new Date();
+            var hours = time.getHours();
+            var minutes = time.getMinutes();
+            var seconds = time.getSeconds();
+            var year = time.getFullYear();
+            var month = time.getMonth() + 1;
+            var day = time.getDate();
+            isPM = hours >= 12;
+            updateClockAndDate(hours, minutes, seconds, year, month, day);
+            startClock();
+        })();
+
+        // 根据输入的日期设置日期
+        document.getElementById('setDateButton').addEventListener('click', function() {
+            var yearInput = document.getElementById('yearInput');
+            var monthInput = document.getElementById('monthInput');
+            var dayInput = document.getElementById('dayInput');
+
+            var year = parseInt(yearInput.value) || new Date().getFullYear();
+            var month = parseInt(monthInput.value) || 1;
+            var day = parseInt(dayInput.value) || 1;
+
+            // 检查输入的日期是否合法
+            function isValidDate(year, month, day) {
+                // 检查年份范围
+                if (year < 1900 || year > 2100) {
+                    return false;
+                }
+                // 检查月份范围
+                if (month < 1 || month > 12) {
+                    return false;
+                }
+                // 检查每个月的天数
+                var daysInMonth = [31, (isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                if (day < 1 || day > daysInMonth[month - 1]) {
+                    return false;
+                }
+                return true;
+            }
+
+            // 判断是否是闰年
+            function isLeapYear(year) {
+                return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+            }
+
+            var errorMessage = document.getElementById('errorMessage');
+
+            // 检查输入日期是否合法
+            if (!isValidDate(year, month, day)) {
+                errorMessage.textContent = '请输入正确的日期';
+                return;
+            }
+
+            // 清除错误消息
+            errorMessage.textContent = '';
+            
+            updateClockAndDate(userSetHours, userSetMinutes, userSetSeconds, year, month, day);
             startClock();
         });
 
@@ -224,11 +345,13 @@
                         crossedZeroCounterClockwise = true;
                     }
                     if (crossedZeroCounterClockwise && currentAngle > 180) {
-                        // 预留：日期-1
+                        // 日期-1
+                        changeDate(-1);
                         isPM = !isPM;
                         crossedZeroCounterClockwise = false;
                     } else if (crossedZeroClockwise && currentAngle < 180) {
-                        // 预留：日期+1
+                        // 日期+1
+                        changeDate(1);
                         isPM = !isPM;
                         crossedZeroClockwise = false;
                     }
@@ -277,6 +400,16 @@
             document.addEventListener('mousemove', moveHandler);
             document.addEventListener('mouseup', upHandler);
         }
+
+        // 改变日期函数
+        function changeDate(deltaDays) {
+            var date = new Date(userSetYear, userSetMonth - 1, userSetDay + deltaDays);
+            userSetYear = date.getFullYear();
+            userSetMonth = date.getMonth() + 1;
+            userSetDay = date.getDate();
+            updateClockAndDate(userSetHours, userSetMinutes, userSetSeconds, userSetYear, userSetMonth, userSetDay);
+        }
+
         function updateHandAngle(element, angle) {
             var transformOrigin = "rotate(" + angle + " 150 150)";
             element.setAttribute("transform", transformOrigin);
