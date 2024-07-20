@@ -35,10 +35,12 @@
         }
 
         #records {
+            height: 300px;
             font-size: 24px;
-            margin-bottom: 20px;
             white-space: pre-wrap;
-
+            max-height: 190px; /* 5条记录的高度，根据实际情况调整 */
+            overflow-y: auto; /* 当内容超出高度时显示滚动条 */
+            margin-bottom: 20px;
         }
 
         button {
@@ -174,10 +176,10 @@
         document.getElementById("recordBtn").addEventListener("click", function () {
             if (!running) alert("计时器未运行，无法记录时间"); // 如果计时器未运行，则报错
             else {
-                if (cnt_record >= 5) {
-                    alert("记录已满");
-                    return;
-                }
+                // if (cnt_record >= 5) {
+                //     alert("记录已满");
+                //     return;
+                // }
                 const currentTime = timeToString(elapsedTime);
                 var currentRecord = currentTime; // 或者是 currentTime 变量
                 recordsText += "\n" + currentRecord;// 将新记录添加到记录字符串中           
