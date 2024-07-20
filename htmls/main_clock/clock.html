@@ -221,11 +221,19 @@
             var hours = parseInt(hourInput.value) || 0;
             var minutes = parseInt(minuteInput.value) || 0;
             var seconds = parseInt(secondInput.value) || 0;
+
+            var errorMessage = document.getElementById('errorMessage');
+
             // 检查输入时间是否合法
             if (hours < 0 || hours >= 24 || minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60) {
-                alert('请输入正确的时间');
+                // alert('请输入正确的时间');
+                errorMessage.textContent = '请输入正确的时间';
                 return;
             }
+
+            // 清除错误消息
+            errorMessage.textContent = '';
+
             isPM = hours >= 12;
             updateClock(hours, minutes, seconds);
             startClock();
