@@ -70,9 +70,6 @@
     <div class="alarm">
         <h2>设置闹钟</h2>
         <div id="setAlarm">
-            <input id="alarmYear" type="number" placeholder="年" min="1900" max="2100">
-            <input id="alarmMonth" type="number" placeholder="月" min="1" max="12">
-            <input id="alarmDay" type="number" placeholder="日" min="1" max="31">
             <input id="alarmHours" type="number" placeholder="时" min="0" max="23">
             <input id="alarmMinutes" type="number" placeholder="分" min="0" max="59">
             <!--<input id="alarmSeconds" type="number" placeholder="秒" min="0" max="59">-->
@@ -83,50 +80,24 @@
     </div>
 
     <script>
-        var userSetYear = 0;
-        var userSetMonth = 0;
-        var userSetDay = 0;
         var userSetHours = 0;
         var userSetMinutes = 0;
         var userSetSeconds = 0;
-
         var alarmHour = 0;
         var alarmMinute = 0;
         var alarmSecond = 0;
-        var alarmYear = 0;
-        var alarmMonth = 0;
-        var alarmDay = 0;
         var clockInterval; // 定义一个变量来存储定时器的ID
 
         function setAlarm() {
-            //alert("开始闹钟设置！");
-            alarmYear = document.getElementById('alarmYear').value;
-            alarmMonth = document.getElementById('alarmMonth').value;
-            alarmDay = document.getElementById('alarmDay').value;
             alarmHour = document.getElementById('alarmHours').value;
             alarmMinute = document.getElementById('alarmMinutes').value;
-
+            // alarmSecond = document.getElementById('alarmSeconds').value;
             // 验证输入的时间是否有效
-            if (!((alarmYear >= 1900 && alarmYear <= 2100) && (alarmMonth >= 1 && alarmMonth <= 12) && (alarmDay >= 1 && alarmDay <= [31, ((alarmYear % 4 === 0 && alarmYear % 100 !== 0) || (alarmYear % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][alarmMonth - 1]))) {
-                alert("输入的日期无效，请输入正确的日期！");
-                alarmYear = 0;
-                alarmMonth = 0;
-                alarmDay = 0;
-                return; // 阻止闹钟设置
-            }
-
             if (alarmHour < 0 || alarmHour >= 24 || alarmMinute < 0 || alarmMinute >= 60 || alarmSecond < 0 || alarmSecond >= 60) {
                 alert("输入的时间无效，请输入正确的时间！");
                 alarmHour = 0;
                 alarmMinute = 0;
                 alarmSecond = 0;
-                return; // 阻止闹钟设置
-            }
-            if (alarmYear < userSetYear || (alarmYear === userSetYear && alarmMonth < userSetMonth) ||
-                (alarmYear === userSetYear && alarmMonth === userSetMonth && alarmDay < userSetDay) ||
-                (alarmYear === userSetYear && alarmMonth === userSetMonth && alarmDay === userSetDay && alarmHour < userSetHours) ||
-                (alarmYear === userSetYear && alarmMonth === userSetMonth && alarmDay === userSetDay && alarmHour === userSetHours && alarmMinute < userSetMinutes)) {
-                alert("不能设置过去的闹钟时间，请重新设置"); // 弹窗提示
                 return; // 阻止闹钟设置
             }
             alert("闹钟设置成功！");
@@ -136,10 +107,12 @@
         function checkAlarm() {
             clockInterval = setInterval(function () {
 
-                if (userSetDay >= alarmDay && userSetMonth >= alarmMonth && userSetYear >= alarmYear && userSetHours >= alarmHour && userSetMinutes >= alarmMinute && userSetSeconds >= alarmSecond) {
-                    clearInterval(clockInterval); // 停止检查
+                if (userSetHours >= alarmHour && userSetMinutes >= alarmMinute && userSetSeconds >= alarmSecond) {
+                    console.log("时间到！");
                     document.getElementById('alarm-sound').play(); // 播放音频
                     alert("时间到！"); // 弹窗提示
+
+                    clearInterval(clockInterval); // 停止检查
                 }
             }, 1000);
         }
@@ -166,13 +139,10 @@
         // 设置监听，每当接收到表盘发来的时间,将当前时间设置为用户设置的时间
         // 用于checkAlarm函数中的时间比较
         window.addEventListener('message', function (e) {
-            userSetDay = e.data.day;
-            userSetMonth = e.data.month;
-            userSetYear = e.data.year;
             userSetHours = e.data.hours;
             userSetMinutes = e.data.minutes;
             userSetSeconds = e.data.seconds;
-            console.log("当前日期：" + userSetYear + ":" + userSetMonth + ":" + userSetDay);
+            console.log("当前时间：" + userSetHours + ":" + userSetMinutes + ":" + userSetSeconds);
         });
 
     </script>

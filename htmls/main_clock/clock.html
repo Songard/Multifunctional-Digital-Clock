@@ -1,102 +1,106 @@
 <!DOCTYPE html>
-<html lang="cn" style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+<html lang="cn"
+    style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-    .body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
+        .body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
 
-    /* 表盘大小 */
-    #clock {
-        width: 300px;
-        height: 300px;
-    }
-    
-    /* 表盘上的刻度数字 */
-    .number {
-        font-family: Arial, sans-serif;
-        font-size: 20px;
-        text-anchor: middle;
-    }
+        /* 表盘大小 */
+        #clock {
+            width: 300px;
+            height: 300px;
+        }
 
-    /* 数字时间显示 */
-    #timeDisplay {
-        font-family: Arial, sans-serif;
-        font-size: 24px;
-        background-color: #f0f0f0;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        width: 300px;
-        text-align: center;
-    }
+        /* 表盘上的刻度数字 */
+        .number {
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            text-anchor: middle;
+        }
 
-    #timeInput {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 10px;
-    }
+        /* 数字时间显示 */
+        #timeDisplay {
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
 
-    #timeInput input {
-        width: 50px;
-        text-align: center;
-        margin: 0 5px;
-    }
+        #timeInput {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
 
-    #setTimeButton {
-        margin-left: 10px;
-    }
+        #timeInput input {
+            width: 50px;
+            text-align: center;
+            margin: 0 5px;
+        }
 
-    #currentTimeButton {
-        margin-top: 10px;
-    }
+        #setTimeButton {
+            margin-left: 10px;
+        }
 
-    /* 日期显示 */
-    #dateDisplay {
-        font-family: Arial, sans-serif;
-        font-size: 24px;
-        background-color: #f0f0f0;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        width: 300px;
-        text-align: center;
-        margin-top: 10px;
-    }
+        #currentTimeButton {
+            margin-top: 10px;
+        }
 
-    #dateInput {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 10px;
-    }
+        /* 日期显示 */
+        #dateDisplay {
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+            margin-top: 10px;
+        }
 
-    #dateInput input {
-        width: 70px;
-        text-align: center;
-        margin: 0 5px;
-    }
+        #dateInput {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
 
-    #setDateButton {
-        margin-left: 10px;
-    }
+        #dateInput input {
+            width: 70px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        #setDateButton {
+            margin-left: 10px;
+        }
 
 
-    #hour-hand, #minute-hand, #second-hand {
-        cursor: pointer;
-    }
+        #hour-hand,
+        #minute-hand,
+        #second-hand {
+            cursor: pointer;
+        }
     </style>
 </head>
 
-<body class = "body">
+<body class="body">
     <!-- 利用SVG画图实现的表盘时钟，需注意中心点统一 -->
     <svg id="clock">
         <!-- 表盘 -->
-        <circle id = "clock-face" cx="150" cy="150" r="140" stroke="black" stroke-width="2" fill="lightblue" />
+        <circle id="clock-face" cx="150" cy="150" r="140" stroke="black" stroke-width="2" fill="lightblue" />
         <!-- 时针，分针，秒针 -->
         <line x1="150" y1="150" x2="150" y2="70" stroke="black" stroke-width="5" id="hour-hand" />
         <line x1="150" y1="150" x2="150" y2="50" stroke="black" stroke-width="3" id="minute-hand" />
@@ -191,7 +195,7 @@
         // 在有初始时间的基础上不断更新时间，为保证平滑更新周期为0.01s
         function startClock() {
             clearInterval(clockInterval);
-            clockInterval = setInterval(function() {
+            clockInterval = setInterval(function () {
                 userSetSeconds += 0.01;
                 if (userSetSeconds > 59.999) {
                     userSetSeconds = 0;
@@ -209,7 +213,7 @@
         }
 
         // 初始化时钟，获取系统时间并显示
-        (function() {
+        (function () {
             var time = new Date();
             var hours = time.getHours();
             var minutes = time.getMinutes();
@@ -220,7 +224,7 @@
         })();
 
         //根据输入的时分秒设置时间
-        document.getElementById('setTimeButton').addEventListener('click', function() {
+        document.getElementById('setTimeButton').addEventListener('click', function () {
             var hourInput = document.getElementById('hourInput');
             var minuteInput = document.getElementById('minuteInput');
             var secondInput = document.getElementById('secondInput');
@@ -246,7 +250,7 @@
             startClock();
         });
 
-        document.getElementById('getCurrentTimeButton').addEventListener('click', function() {
+        document.getElementById('getCurrentTimeButton').addEventListener('click', function () {
             var time = new Date();
             var hours = time.getHours();
             var minutes = time.getMinutes();
@@ -274,7 +278,7 @@
         }
 
         // 初始化时钟和日期
-        (function() {
+        (function () {
             var time = new Date();
             var hours = time.getHours();
             var minutes = time.getMinutes();
@@ -288,7 +292,7 @@
         })();
 
         // 根据输入的日期设置日期
-        document.getElementById('setDateButton').addEventListener('click', function() {
+        document.getElementById('setDateButton').addEventListener('click', function () {
             var yearInput = document.getElementById('yearInput');
             var monthInput = document.getElementById('monthInput');
             var dayInput = document.getElementById('dayInput');
@@ -330,7 +334,7 @@
 
             // 清除错误消息
             errorMessage.textContent = '';
-            
+
             updateClockAndDate(userSetHours, userSetMinutes, userSetSeconds, year, month, day);
             startClock();
         });
@@ -496,15 +500,19 @@
                 if (event.source) {
                     event.source.postMessage({
                         type: 't',
+                        day: userSetDay,
+                        month: userSetMonth,
+                        year: userSetYear,
                         hours: userSetHours,
                         minutes: userSetMinutes,
                         seconds: userSetSeconds
                     }, '*');
-                }else{
+                } else {
                     console.error('ERROR: no source event');
                 }
             }
         }, false);
     </script>
 </body>
+
 </html>
