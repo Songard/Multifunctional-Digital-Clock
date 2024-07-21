@@ -156,7 +156,7 @@
         var isPM = false;
         var userSetYear, userSetMonth, userSetDay;
 
-        // 更新时间函数，以输入的时分秒为参数进行设置，若没有输入则默认获取系统时间
+        // 更新时钟函数，以输入的时分秒为参数进行设置，若没有输入则默认获取系统时间
         function updateClock(hours, minutes, seconds) {
             userSetHours = hours;
             userSetMinutes = minutes;
@@ -165,6 +165,7 @@
             var hourHand = document.getElementById('hour-hand');
             var minuteHand = document.getElementById('minute-hand');
             var secondHand = document.getElementById('second-hand');
+            var clockFace = document.getElementById('clock-face'); // 获取表盘元素
 
             // 计算时分秒对应指针的角度
             var hourDeg = (360 / 12) * (userSetHours % 12) + (360 / 12) * (userSetMinutes / 60);
@@ -176,9 +177,15 @@
             secondHand.setAttribute('transform', `rotate(${secondDeg}, 150, 150)`);
 
             var timeDisplay = document.getElementById('timeDisplay');
-            
-            var formattedTime = `${userSetHours.toString().padStart(2, '0')}:${userSetMinutes.toString().padStart(2, '0')}:${Math.floor(userSetSeconds).toString().padStart(2, '0')}`;
-            timeDisplay.textContent = formattedTime;
+
+            timeDisplay.textContent = `${userSetHours.toString().padStart(2, '0')}:${userSetMinutes.toString().padStart(2, '0')}:${Math.floor(userSetSeconds).toString().padStart(2, '0')}`;
+
+            // 根据时间设置表盘背景颜色
+            if (userSetHours >= 6 && userSetHours < 18) {
+                clockFace.setAttribute('fill', 'mintcream'); // 奶白色
+            } else {
+                clockFace.setAttribute('fill', 'lightgray'); // 浅灰色
+            }
         }
 
         // 在有初始时间的基础上不断更新时间，为保证平滑更新周期为0.01s
