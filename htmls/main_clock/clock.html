@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+<<<<<<< HEAD
         .body {
             display: flex;
             justify-content: center;
@@ -18,6 +19,50 @@
             width: 300px;
             height: 300px;
         }
+=======
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button:hover {
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+
+    /* 表盘大小 */
+    #clock {
+        border: 4px solid #555555;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        height: 300px;
+        width: 300px;
+    }
+
+    #line-hand {
+        stroke-linecap: round;
+    }
+
+    #hour-hand { stroke: #333; }
+    #minute-hand { stroke: #666; }
+    #second-hand { stroke: #ff6347; }
+
+    
+    /* 表盘上的刻度数字 */
+    .number {
+        font-family: Arial, sans-serif;
+        font-size: 20px;
+        text-anchor: middle;
+    }
+>>>>>>> d4c601b335fd3261d0ebf05bc92bfab08c8588fb
 
         /* 表盘上的刻度数字 */
         .number {
@@ -88,26 +133,64 @@
         }
 
 
+<<<<<<< HEAD
         #hour-hand,
         #minute-hand,
         #second-hand {
             cursor: pointer;
         }
+=======
+    #hour-hand, #minute-hand, #second-hand {
+        cursor: pointer;
+    }
+
+    #timeDisplay, #dateDisplay {
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+    input[type="number"] {
+        width: 70px;
+        padding: 5px;
+        margin: 0 5px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        text-align: center;
+    }
+
+    input[type="number"]:focus {
+        border-color: #555;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 表盘上的数字不可选中*/
+    .numbers .number {
+    user-select: none;
+    }
+
+>>>>>>> d4c601b335fd3261d0ebf05bc92bfab08c8588fb
     </style>
 </head>
 
 <body class="body">
     <!-- 利用SVG画图实现的表盘时钟，需注意中心点统一 -->
-    <svg id="clock">
+    <svg id="clock" width="300px" height="300px" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet">
         <!-- 表盘 -->
+<<<<<<< HEAD
         <circle id="clock-face" cx="150" cy="150" r="140" stroke="black" stroke-width="2" fill="lightblue" />
+=======
+        <circle id="clock-face" cx="150" cy="150" r="140" stroke="black" stroke-width="2" fill="lightgray" />
+>>>>>>> d4c601b335fd3261d0ebf05bc92bfab08c8588fb
         <!-- 时针，分针，秒针 -->
         <line x1="150" y1="150" x2="150" y2="70" stroke="black" stroke-width="5" id="hour-hand" />
         <line x1="150" y1="150" x2="150" y2="50" stroke="black" stroke-width="3" id="minute-hand" />
         <line x1="150" y1="150" x2="150" y2="40" stroke="red" stroke-width="1" id="second-hand" />
+        <!-- 中心点装饰 -->
         <circle cx="150" cy="150" r="4" stroke="black" stroke-width="2" fill="gray" />
         <!-- 表盘上的刻度数字 -->
-        <g id="numbers" transform="translate(150,150)">
+        <g id="numbers" class="numbers" transform="translate(150,150)">
             <text x="0" y="-107" class="number">12</text>
             <text x="115" y="7" class="number">3</text>
             <text x="0" y="120" class="number">6</text>
@@ -186,7 +269,7 @@
 
             // 根据时间设置表盘背景颜色
             if (userSetHours >= 6 && userSetHours < 18) {
-                clockFace.setAttribute('fill', 'mintcream'); // 奶白色
+                clockFace.setAttribute('fill', 'rgba(255,255,240,0.8)'); // 奶白色
             } else {
                 clockFace.setAttribute('fill', 'lightgray'); // 浅灰色
             }
@@ -512,6 +595,17 @@
                 }
             }
         }, false);
+
+        // 按下按钮的时候改变一下颜色，属于交互反馈
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', function() {
+                this.style.backgroundColor = '#ccc';
+            });
+            button.addEventListener('mouseup', function() {
+                this.style.backgroundColor = '';
+            });
+        });
+
     </script>
 </body>
 
