@@ -395,86 +395,86 @@
             startClock();
         });
 
-        document.getElementById('hour-hand').addEventListener('mousedown', handleMouseDown);
-        document.getElementById('minute-hand').addEventListener('mousedown', handleMouseDown);
-        document.getElementById('second-hand').addEventListener('mousedown', handleMouseDown);
+        // document.getElementById('hour-hand').addEventListener('mousedown', handleMouseDown);
+        // document.getElementById('minute-hand').addEventListener('mousedown', handleMouseDown);
+        // document.getElementById('second-hand').addEventListener('mousedown', handleMouseDown);
 
-        function handleMouseDown(event) {
-            var element = event.target;
-            var clock = document.getElementById('clock');
-            var rect = clock.getBoundingClientRect();
-            var startAngle = getAngle(event.clientX - rect.left, event.clientY - rect.top);
-            var crossedZeroClockwise = false;
-            var crossedZeroCounterClockwise = false;
+        // function handleMouseDown(event) {
+        //     var element = event.target;
+        //     var clock = document.getElementById('clock');
+        //     var rect = clock.getBoundingClientRect();
+        //     var startAngle = getAngle(event.clientX - rect.left, event.clientY - rect.top);
+        //     var crossedZeroClockwise = false;
+        //     var crossedZeroCounterClockwise = false;
 
-            function moveHandler(event) {
-                var currentAngle = getAngle(event.clientX - rect.left, event.clientY - rect.top);
-                var deltaAngle = currentAngle - startAngle;
-                if (deltaAngle < -180) deltaAngle += 360;
-                if (deltaAngle > 180) deltaAngle -= 360;
+        //     function moveHandler(event) {
+        //         var currentAngle = getAngle(event.clientX - rect.left, event.clientY - rect.top);
+        //         var deltaAngle = currentAngle - startAngle;
+        //         if (deltaAngle < -180) deltaAngle += 360;
+        //         if (deltaAngle > 180) deltaAngle -= 360;
 
-                if (element.id === 'hour-hand') {
-                    if (startAngle > 270 && currentAngle < 90) {
-                        crossedZeroClockwise = true;
-                    } else if (startAngle < 90 && currentAngle > 270) {
-                        crossedZeroCounterClockwise = true;
-                    }
-                    if (crossedZeroCounterClockwise && currentAngle > 180) {
-                        // 日期-1
-                        changeDate(-1);
-                        isPM = !isPM;
-                        crossedZeroCounterClockwise = false;
-                    } else if (crossedZeroClockwise && currentAngle < 180) {
-                        // 日期+1
-                        changeDate(1);
-                        isPM = !isPM;
-                        crossedZeroClockwise = false;
-                    }
-                }
-                if (element.id === 'minute-hand') {
-                    if (startAngle > 270 && currentAngle < 90) {
-                        crossedZeroClockwise = true;
-                    } else if (startAngle < 90 && currentAngle > 270) {
-                        crossedZeroCounterClockwise = true;
-                    }
-                    if (crossedZeroCounterClockwise && currentAngle > 180) {
-                        userSetHours = (userSetHours + 23) % 24;
-                        crossedZeroCounterClockwise = false;
-                    } else if (crossedZeroClockwise && currentAngle < 180) {
-                        userSetHours = (userSetHours + 1) % 24;
-                        crossedZeroClockwise = false;
-                    }
-                }
-                if (element.id === 'second-hand') {
-                    if (startAngle > 270 && currentAngle < 90) {
-                        crossedZeroClockwise = true;
-                    } else if (startAngle < 90 && currentAngle > 270) {
-                        crossedZeroCounterClockwise = true;
-                    }
-                    if (crossedZeroCounterClockwise && currentAngle > 180) {
-                        userSetMinutes = (userSetMinutes + 59) % 60;
-                        crossedZeroCounterClockwise = false;
-                    } else if (crossedZeroClockwise && currentAngle < 180) {
-                        userSetMinutes = (userSetMinutes + 1) % 60;
-                        crossedZeroClockwise = false;
-                    }
-                }
+        //         if (element.id === 'hour-hand') {
+        //             if (startAngle > 270 && currentAngle < 90) {
+        //                 crossedZeroClockwise = true;
+        //             } else if (startAngle < 90 && currentAngle > 270) {
+        //                 crossedZeroCounterClockwise = true;
+        //             }
+        //             if (crossedZeroCounterClockwise && currentAngle > 180) {
+        //                 // 日期-1
+        //                 changeDate(-1);
+        //                 isPM = !isPM;
+        //                 crossedZeroCounterClockwise = false;
+        //             } else if (crossedZeroClockwise && currentAngle < 180) {
+        //                 // 日期+1
+        //                 changeDate(1);
+        //                 isPM = !isPM;
+        //                 crossedZeroClockwise = false;
+        //             }
+        //         }
+        //         if (element.id === 'minute-hand') {
+        //             if (startAngle > 270 && currentAngle < 90) {
+        //                 crossedZeroClockwise = true;
+        //             } else if (startAngle < 90 && currentAngle > 270) {
+        //                 crossedZeroCounterClockwise = true;
+        //             }
+        //             if (crossedZeroCounterClockwise && currentAngle > 180) {
+        //                 userSetHours = (userSetHours + 23) % 24;
+        //                 crossedZeroCounterClockwise = false;
+        //             } else if (crossedZeroClockwise && currentAngle < 180) {
+        //                 userSetHours = (userSetHours + 1) % 24;
+        //                 crossedZeroClockwise = false;
+        //             }
+        //         }
+        //         if (element.id === 'second-hand') {
+        //             if (startAngle > 270 && currentAngle < 90) {
+        //                 crossedZeroClockwise = true;
+        //             } else if (startAngle < 90 && currentAngle > 270) {
+        //                 crossedZeroCounterClockwise = true;
+        //             }
+        //             if (crossedZeroCounterClockwise && currentAngle > 180) {
+        //                 userSetMinutes = (userSetMinutes + 59) % 60;
+        //                 crossedZeroCounterClockwise = false;
+        //             } else if (crossedZeroClockwise && currentAngle < 180) {
+        //                 userSetMinutes = (userSetMinutes + 1) % 60;
+        //                 crossedZeroClockwise = false;
+        //             }
+        //         }
 
-                // 直接更新指针角度
-                updateHandAngle(element, currentAngle);
+        //         // 直接更新指针角度
+        //         updateHandAngle(element, currentAngle);
 
-                // 更新起始角度
-                startAngle = currentAngle;
-            }
+        //         // 更新起始角度
+        //         startAngle = currentAngle;
+        //     }
 
-            function upHandler() {
-                document.removeEventListener('mousemove', moveHandler);
-                document.removeEventListener('mouseup', upHandler);
-            }
+        //     function upHandler() {
+        //         document.removeEventListener('mousemove', moveHandler);
+        //         document.removeEventListener('mouseup', upHandler);
+        //     }
 
-            document.addEventListener('mousemove', moveHandler);
-            document.addEventListener('mouseup', upHandler);
-        }
+        //     document.addEventListener('mousemove', moveHandler);
+        //     document.addEventListener('mouseup', upHandler);
+        // }
 
         // 改变日期函数
         function changeDate(deltaDays) {
