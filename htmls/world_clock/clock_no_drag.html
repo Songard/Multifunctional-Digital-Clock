@@ -8,7 +8,7 @@
     <style>
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f4f4f4;
+        background-color: #f0f0f0;
         color: #333;
         margin: 0;
         padding: 0;
@@ -186,23 +186,8 @@
         </g>
 
     </svg>
-    <!-- 数字时间显示 -->
-    <div id="timeDisplay"></div>
-    <div id="timeInput">
-        <input type="number" id="hourInput" min="0" max="23" placeholder="HH">
-        <input type="number" id="minuteInput" min="0" max="59" placeholder="MM">
-        <input type="number" id="secondInput" min="0" max="59" placeholder="SS">
-        <button id="setTimeButton">设置时间</button>
-        <button id="getCurrentTimeButton">恢复当前时间</button>
-    </div>
-    <!-- 日期显示 -->
-    <div id="dateDisplay"></div>
-    <div id="dateInput">
-        <input type="number" id="yearInput" min="1900" max="2100" placeholder="YYYY">
-        <input type="number" id="monthInput" min="1" max="12" placeholder="MM">
-        <input type="number" id="dayInput" min="1" max="31" placeholder="DD">
-        <button id="setDateButton">设置日期</button>
-    </div>
+
+
     <!-- 错误信息显示 -->
     <div id="errorMessage" style="color: red; margin-top: 10px;"></div>
 
@@ -215,6 +200,15 @@
         var userSetSeconds = 0;
         var isPM = false;
         var userSetYear, userSetMonth, userSetDay;
+
+        // 从URL查询字符串中获取时间参数
+        function getTimeParams() {
+            var params = new URLSearchParams(window.location.search);
+            var hours = parseInt(params.get('hours')) || 0;
+            var minutes = parseInt(params.get('minutes')) || 0;
+            var seconds = parseInt(params.get('seconds')) || 0;
+            return { hours, minutes, seconds };
+        }
 
         // 更新时钟函数，以输入的时分秒为参数进行设置，若没有输入则默认获取系统时间
         function updateClock(hours, minutes, seconds) {
@@ -235,10 +229,6 @@
             hourHand.setAttribute('transform', `rotate(${hourDeg}, 150, 150)`);
             minuteHand.setAttribute('transform', `rotate(${minuteDeg}, 150, 150)`);
             secondHand.setAttribute('transform', `rotate(${secondDeg}, 150, 150)`);
-
-            var timeDisplay = document.getElementById('timeDisplay');
-
-            timeDisplay.textContent = `${userSetHours.toString().padStart(2, '0')}:${userSetMinutes.toString().padStart(2, '0')}:${Math.floor(userSetSeconds).toString().padStart(2, '0')}`;
 
             // 根据时间设置表盘背景颜色
             if (userSetHours >= 6 && userSetHours < 18) {
@@ -268,132 +258,58 @@
             }, 10);
         }
 
-        // 初始化时钟，获取系统时间并显示
+        function onURLParamsChange() {
+            var time = getTimeParams();
+            if (time.hours !== userSetHours || time.minutes !== userSetMinutes || time.seconds !== userSetSeconds) {
+                updateClock(time.hours, time.minutes, time.seconds);
+                startClock();
+            }
+        }
+        window.addEventListener('hashchange', onURLParamsChange);
+
+        // 初始化时钟，获取URL传入时间并显示
         (function () {
-            var time = new Date();
-            var hours = time.getHours();
-            var minutes = time.getMinutes();
-            var seconds = time.getSeconds();
+            var time = getTimeParams()
+            var hours = time.hours;
+            var minutes = time.minutes;
+            var seconds = time.seconds;
             isPM = hours >= 12;
             updateClock(hours, minutes, seconds);
             startClock();
         })();
 
-        //根据输入的时分秒设置时间
-        document.getElementById('setTimeButton').addEventListener('click', function () {
-            var hourInput = document.getElementById('hourInput');
-            var minuteInput = document.getElementById('minuteInput');
-            var secondInput = document.getElementById('secondInput');
 
-            var hours = parseInt(hourInput.value) || 0;
-            var minutes = parseInt(minuteInput.value) || 0;
-            var seconds = parseInt(secondInput.value) || 0;
 
-            var errorMessage = document.getElementById('errorMessage');
-
-            // 检查输入时间是否合法
-            if (hours < 0 || hours >= 24 || minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60) {
-                // alert('请输入正确的时间');
-                errorMessage.textContent = '请输入正确的时间';
-                return;
-            }
-
-            // 清除错误消息
-            errorMessage.textContent = '';
-
-            isPM = hours >= 12;
-            updateClock(hours, minutes, seconds);
-            startClock();
-        });
-
-        document.getElementById('getCurrentTimeButton').addEventListener('click', function () {
-            var time = new Date();
-            var hours = time.getHours();
-            var minutes = time.getMinutes();
-            var seconds = time.getSeconds();
-            var year = time.getFullYear();
-            var month = time.getMonth() + 1;
-            var day = time.getDate();
-
-            isPM = hours >= 12;
-            updateClockAndDate(hours, minutes, seconds, year, month, day);
-            startClock();
-        });
 
         // 更新时间和日期函数（重置当前时间同时需要重置日期）
-        function updateClockAndDate(hours, minutes, seconds, year, month, day) {
-            updateClock(hours, minutes, seconds);
-
-            userSetYear = year;
-            userSetMonth = month;
-            userSetDay = day;
-
-            var dateDisplay = document.getElementById('dateDisplay');
-            var formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-            dateDisplay.textContent = formattedDate;
-        }
+        // function updateClockAndDate(hours, minutes, seconds, year, month, day) {
+        //     updateClock(hours, minutes, seconds);
+        //
+        //     userSetYear = year;
+        //     userSetMonth = month;
+        //     userSetDay = day;
+        //
+        //     var dateDisplay = document.getElementById('dateDisplay');
+        //     var formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        //     dateDisplay.textContent = formattedDate;
+        // }
 
         // 初始化时钟和日期
-        (function () {
-            var time = new Date();
-            var hours = time.getHours();
-            var minutes = time.getMinutes();
-            var seconds = time.getSeconds();
-            var year = time.getFullYear();
-            var month = time.getMonth() + 1;
-            var day = time.getDate();
-            isPM = hours >= 12;
-            updateClockAndDate(hours, minutes, seconds, year, month, day);
-            startClock();
-        })();
+        // (function () {
+        //     var time = new Date();
+        //     var hours = time.getHours();
+        //     var minutes = time.getMinutes();
+        //     var seconds = time.getSeconds();
+        //     var year = time.getFullYear();
+        //     var month = time.getMonth() + 1;
+        //     var day = time.getDate();
+        //     isPM = hours >= 12;
+        //     // updateClockAndDate(hours, minutes, seconds, year, month, day);
+        //     updateClock(hours, minutes, seconds)
+        //     startClock();
+        // })();
 
-        // 根据输入的日期设置日期
-        document.getElementById('setDateButton').addEventListener('click', function () {
-            var yearInput = document.getElementById('yearInput');
-            var monthInput = document.getElementById('monthInput');
-            var dayInput = document.getElementById('dayInput');
 
-            var year = parseInt(yearInput.value) || new Date().getFullYear();
-            var month = parseInt(monthInput.value) || 1;
-            var day = parseInt(dayInput.value) || 1;
-
-            // 检查输入的日期是否合法
-            function isValidDate(year, month, day) {
-                // 检查年份范围
-                if (year < 1900 || year > 2100) {
-                    return false;
-                }
-                // 检查月份范围
-                if (month < 1 || month > 12) {
-                    return false;
-                }
-                // 检查每个月的天数
-                var daysInMonth = [31, (isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-                if (day < 1 || day > daysInMonth[month - 1]) {
-                    return false;
-                }
-                return true;
-            }
-
-            // 判断是否是闰年
-            function isLeapYear(year) {
-                return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
-            }
-
-            var errorMessage = document.getElementById('errorMessage');
-
-            // 检查输入日期是否合法
-            if (!isValidDate(year, month, day)) {
-                errorMessage.textContent = '请输入正确的日期';
-                return;
-            }
-
-            // 清除错误消息
-            errorMessage.textContent = '';
-
-            updateClockAndDate(userSetHours, userSetMinutes, userSetSeconds, year, month, day);
-            startClock();
-        });
 
         // document.getElementById('hour-hand').addEventListener('mousedown', handleMouseDown);
         // document.getElementById('minute-hand').addEventListener('mousedown', handleMouseDown);
@@ -477,76 +393,76 @@
         // }
 
         // 改变日期函数
-        function changeDate(deltaDays) {
-            var date = new Date(userSetYear, userSetMonth - 1, userSetDay + deltaDays);
-            userSetYear = date.getFullYear();
-            userSetMonth = date.getMonth() + 1;
-            userSetDay = date.getDate();
-            updateClockAndDate(userSetHours, userSetMinutes, userSetSeconds, userSetYear, userSetMonth, userSetDay);
-        }
+        // function changeDate(deltaDays) {
+        //     var date = new Date(userSetYear, userSetMonth - 1, userSetDay + deltaDays);
+        //     userSetYear = date.getFullYear();
+        //     userSetMonth = date.getMonth() + 1;
+        //     userSetDay = date.getDate();
+        //     updateClockAndDate(userSetHours, userSetMinutes, userSetSeconds, userSetYear, userSetMonth, userSetDay);
+        // }
 
-        function updateHandAngle(element, angle) {
-            var transformOrigin = "rotate(" + angle + " 150 150)";
-            element.setAttribute("transform", transformOrigin);
+        // function updateHandAngle(element, angle) {
+        //     var transformOrigin = "rotate(" + angle + " 150 150)";
+        //     element.setAttribute("transform", transformOrigin);
+        //
+        //     // 计算并更新时间
+        //     var hours = userSetHours;
+        //     var minutes = userSetMinutes;
+        //     var seconds = userSetSeconds;
+        //
+        //     if (element.id === 'hour-hand') {
+        //         hours = Math.floor(angle / 30);
+        //         if (isPM) {
+        //             userSetHours = (hours + 12) % 24;
+        //         } else {
+        //             userSetHours = hours % 12;
+        //         }
+        //     } else if (element.id === 'minute-hand') {
+        //         minutes = Math.floor(angle / 6);
+        //         userSetMinutes = (minutes + 60) % 60;
+        //     } else if (element.id === 'second-hand') {
+        //         seconds = Math.floor(angle / 6);
+        //         userSetSeconds = (seconds + 60) % 60;
+        //     }
+        //
+        //     // 更新时间显示
+        //     var timeDisplay = document.getElementById('timeDisplay');
+        //     var formattedTime = `${userSetHours.toString().padStart(2, '0')}:${userSetMinutes.toString().padStart(2, '0')}:${Math.floor(userSetSeconds).toString().padStart(2, '0')}`;
+        //     timeDisplay.textContent = formattedTime;
+        // }
 
-            // 计算并更新时间
-            var hours = userSetHours;
-            var minutes = userSetMinutes;
-            var seconds = userSetSeconds;
-
-            if (element.id === 'hour-hand') {
-                hours = Math.floor(angle / 30);
-                if (isPM) {
-                    userSetHours = (hours + 12) % 24;
-                } else {
-                    userSetHours = hours % 12;
-                }
-            } else if (element.id === 'minute-hand') {
-                minutes = Math.floor(angle / 6);
-                userSetMinutes = (minutes + 60) % 60;
-            } else if (element.id === 'second-hand') {
-                seconds = Math.floor(angle / 6);
-                userSetSeconds = (seconds + 60) % 60;
-            }
-
-            // 更新时间显示
-            var timeDisplay = document.getElementById('timeDisplay');
-            var formattedTime = `${userSetHours.toString().padStart(2, '0')}:${userSetMinutes.toString().padStart(2, '0')}:${Math.floor(userSetSeconds).toString().padStart(2, '0')}`;
-            timeDisplay.textContent = formattedTime;
-        }
-
-        function getAngle(x, y) {
-            var centerX = 150;
-            var centerY = 150;
-            var angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
-            return (angle + 90 + 360) % 360; // 90度偏移是debug出来的，推断是坐标原点对应坐标计算方式导致
-        }
-
-        function updateHandTime(element, startTime, deltaAngle) {
-            var hours = startTime.hours;
-            var minutes = startTime.minutes;
-            var seconds = startTime.seconds;
-
-            if (element.id === 'hour-hand') {
-                var deltaHours = deltaAngle / 30;
-                hours = (startTime.hours + deltaHours) % 24;
-                if (hours < 0) hours += 24;
-            } else if (element.id === 'minute-hand') {
-                var deltaMinutes = deltaAngle / 6;
-                minutes = (startTime.minutes + deltaMinutes) % 60;
-                if (minutes < 0) minutes += 60;
-            } else if (element.id === 'second-hand') {
-                var deltaSeconds = deltaAngle / 6;
-                seconds = (startTime.seconds + deltaSeconds) % 60;
-                if (seconds < 0) seconds += 60;
-            }
-
-            hours = Math.floor(hours);
-            minutes = Math.floor(minutes);
-            seconds = Math.floor(seconds);
-
-            updateClock(hours, minutes, seconds);
-        }
+        // function getAngle(x, y) {
+        //     var centerX = 150;
+        //     var centerY = 150;
+        //     var angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
+        //     return (angle + 90 + 360) % 360; // 90度偏移是debug出来的，推断是坐标原点对应坐标计算方式导致
+        // }
+        //
+        // function updateHandTime(element, startTime, deltaAngle) {
+        //     var hours = startTime.hours;
+        //     var minutes = startTime.minutes;
+        //     var seconds = startTime.seconds;
+        //
+        //     if (element.id === 'hour-hand') {
+        //         var deltaHours = deltaAngle / 30;
+        //         hours = (startTime.hours + deltaHours) % 24;
+        //         if (hours < 0) hours += 24;
+        //     } else if (element.id === 'minute-hand') {
+        //         var deltaMinutes = deltaAngle / 6;
+        //         minutes = (startTime.minutes + deltaMinutes) % 60;
+        //         if (minutes < 0) minutes += 60;
+        //     } else if (element.id === 'second-hand') {
+        //         var deltaSeconds = deltaAngle / 6;
+        //         seconds = (startTime.seconds + deltaSeconds) % 60;
+        //         if (seconds < 0) seconds += 60;
+        //     }
+        //
+        //     hours = Math.floor(hours);
+        //     minutes = Math.floor(minutes);
+        //     seconds = Math.floor(seconds);
+        //
+        //     updateClock(hours, minutes, seconds);
+        // }
 
         // 表盘提供一个接口，用于获取当前时间
         // 通过postMessage进行页面间通信,获取时间方式参考htmls/alarm/alarm.html

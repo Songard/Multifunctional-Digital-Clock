@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>世界时钟 World Clock</title>
-    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="../../css/navbar.css">
     <style>
         body {
             width: 100%;
@@ -12,21 +12,23 @@
             justify-content: center;
             flex-direction: column;
         }
+        .top {
+            display: flex;
+            justify-content: center;
+            top: 0;
+            position: absolute;
+            width: 100%;
+        }
         .worldClock {
             display: flex;
             justify-content: center;
             align-items: center;
+            position: absolute; /* 继续使用绝对定位，但移除top属性 */
+            width: 100%; /* 确保宽度填满容器，保持居中 */
+            top: 20%; /* 如果需要进一步下移，可以使用百分比或者固定单位 */
             font-family: Arial, sans-serif;
         }
-        .top {
-            display: flex;
-            justify-content: center;
-            position: fixed;
-            top: 0;
-            width: 100%;
-        }
         .dial {
-            margin-top: 100px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -38,19 +40,14 @@
             align-items: center;
             width: 250px;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
             background-color: #f0f0f0;
         }
         .timeDisplay {
             font-size: 24px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
             width: 100%;
             text-align: center;
-            padding: 10px;
             margin-top: 10px;
-            background-color: white;
+            background-color: #f0f0f0;
         }
         .timezoneSelect {
             font-size: 12px;
@@ -62,52 +59,79 @@
             font-size: 18px;
             margin-bottom: 10px;
         }
+        iframe {
+            border: none; /* 或者使用其他样式来覆盖嵌入页面的边框 */
+        }
     </style>
 </head>
 <body>
     <div class="top">
         <div class="navbar">
             <div class="navbar_inner">
-                <a href="htmls/world_clock/world_clock.html">世界时钟</a>
-                <a href="htmls/alarm/alarm.html">闹钟</a>
-                <a href="htmls/stopwatch/stopwatch.html">计时器</a>
-                <a href="htmls/timer/timer.html">秒表</a>
+                <a href="world_clock.html">世界时钟</a>
+                <a href="../alarm/alarm.html">闹钟</a>
+                <a href="../stopwatch/stopwatch.html">秒表</a>
+                <a href="../timer/timer.html">计时器</a>
             </div>
         </div>
     </div>
 
-    <div class="dial">        
-        <iframe 
-            width="500"
-            height="500"
-            frameborder="no" 
-            marginwidth="0" 
-            marginheight="0" 
-            src="htmls//main_clock//clock.html">
-        </iframe>
-    </div>
+
 
     <!-- World Clock -->
-    <div class="worldClock">
+    <div class="worldClock" >
         <div class="clockContainer">
             <div class="locationDisplay"></div>
             <select class="timezoneSelect"></select>
             <div class="timeDisplay"></div>
+            <div class="dial">
+                <iframe
+                    width="400"
+                    height="400"
+                    src="clock_no_drag.html"
+                    style="transform: scale(0.7)">
+                </iframe>
+            </div>
+
         </div>
         <div class="clockContainer">
             <div class="locationDisplay"></div>
             <select class="timezoneSelect"></select>
             <div class="timeDisplay"></div>
+            <div class="dial">
+                <iframe
+                    width="400"
+                    height="400"
+                    src="clock_no_drag.html"
+                    style="transform: scale(0.7)">
+                </iframe>
+            </div>
         </div>
         <div class="clockContainer">
             <div class="locationDisplay"></div>
             <select class="timezoneSelect"></select>
             <div class="timeDisplay"></div>
+            <div class="dial">
+                <iframe
+                    width="400"
+                    height="400"
+                    src="clock_no_drag.html"
+                    style="transform: scale(0.7)">
+                </iframe>
+            </div>
         </div>
         <div class="clockContainer">
             <div class="locationDisplay"></div>
             <select class="timezoneSelect"></select>
             <div class="timeDisplay"></div>
+            <div class="dial">
+                <iframe
+                    width="400"
+                    height="400"
+                    src="clock_no_drag.html"
+                    style="transform: scale(0.7)">
+                </iframe>
+            </div>
         </div>
     </div>
     <script>
@@ -201,6 +225,7 @@
                 const selectedOption = selectElement.options[selectElement.selectedIndex];
                 locationDisplay.textContent = selectedOption.textContent.split(' ')[0];
                 updateClock(selectElement);
+                updateClockIframe(selectElement); // 当选择改变时，也更新iframe的src
             });
         }
 
@@ -217,12 +242,35 @@
             selectElement.nextElementSibling.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
+        function updateClockIframe(selectElement) {
+            const timeZoneOffset = parseInt(selectElement.value);
+            const now = new Date();
+            const utcNow = new Date(now.getTime() + (now.getTimezoneOffset() * 60000));
+            const timeZoneNow = new Date(utcNow.getTime() + (timeZoneOffset * 3600000));
+            const hours = timeZoneNow.getHours();
+            const minutes = timeZoneNow.getMinutes();
+            const seconds = timeZoneNow.getSeconds();
+
+            // 获取对应的iframe
+            const iframe = selectElement.parentElement.querySelector('.dial iframe');
+
+            // 修改iframe的src属性
+            const url = new URL(iframe.src);
+            const params = new URLSearchParams(url.search);
+            params.set('hours', hours.toString());
+            params.set('minutes', minutes.toString());
+            params.set('seconds', seconds.toString());
+            url.search = params.toString();
+            iframe.src = url.href;
+        }
+
         function initClocks() {
             const timezoneSelects = document.querySelectorAll('.timezoneSelect');
             timezoneSelects.forEach((select, index) => {
                 preset(select, index);
                 setInterval(() => updateClock(select), 1000);
-                updateClock(select);
+                updateClock(select)
+                updateClockIframe(select);
             });
         }
 
