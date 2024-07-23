@@ -41,7 +41,6 @@
     #minute-hand { stroke: #666; }
     #second-hand { stroke: #ff6347; }
 
-    
     /* 表盘上的刻度数字 */
     .number {
         font-family: Arial, sans-serif;
@@ -49,73 +48,66 @@
         text-anchor: middle;
     }
 
-        /* 表盘上的刻度数字 */
-        .number {
-            font-family: Arial, sans-serif;
-            font-size: 20px;
-            text-anchor: middle;
-        }
+    /* 数字时间显示 */
+    #timeDisplay {
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
 
-        /* 数字时间显示 */
-        #timeDisplay {
-            font-family: Arial, sans-serif;
-            font-size: 24px;
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 300px;
-            text-align: center;
-        }
+    #timeInput {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
 
-        #timeInput {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-        }
+    #timeInput input {
+        width: 50px;
+        text-align: center;
+        margin: 0 5px;
+    }
 
-        #timeInput input {
-            width: 50px;
-            text-align: center;
-            margin: 0 5px;
-        }
+    #setTimeButton {
+        margin-left: 10px;
+    }
 
-        #setTimeButton {
-            margin-left: 10px;
-        }
+    #currentTimeButton {
+        margin-top: 10px;
+    }
 
-        #currentTimeButton {
-            margin-top: 10px;
-        }
+    /* 日期显示 */
+    #dateDisplay {
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+        margin-top: 10px;
+    }
 
-        /* 日期显示 */
-        #dateDisplay {
-            font-family: Arial, sans-serif;
-            font-size: 24px;
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 300px;
-            text-align: center;
-            margin-top: 10px;
-        }
+    #dateInput {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
 
-        #dateInput {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-        }
+    #dateInput input {
+        width: 70px;
+        text-align: center;
+        margin: 0 5px;
+    }
 
-        #dateInput input {
-            width: 70px;
-            text-align: center;
-            margin: 0 5px;
-        }
-
-        #setDateButton {
-            margin-left: 10px;
-        }
+    #setDateButton {
+        margin-left: 10px;
+    }
 
 
     #hour-hand, #minute-hand, #second-hand {
