@@ -39,8 +39,32 @@
         }
 
         input[type="number"] {
-            width: 50px;
-            /* 调整输入框的宽度 */
+            width: 100px;
+            font-size: 30px;
+        }
+
+        button {
+            font-size: 18px;
+            /* 增加按钮内文字的大小 */
+            padding: 8px 20px;
+            /* 增加按钮的内边距，第一个值是上下，第二个值是左右 */
+            margin: 10px;
+            /* 增加按钮之间的间距 */
+            cursor: pointer;
+            /* 改善按钮的点击体验 */
+            border: none;
+            /* 移除边框 */
+            border-radius: 2px;
+            /* 给按钮添加圆角 */
+            color: black;
+            /* 设置按钮文字的颜色 */
+            background-color: rgb(229, 229, 229);
+            /* 设置按钮的背景颜色 */
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            /* 鼠标悬停时改变按钮的背景颜色 */
         }
     </style>
 </head>
@@ -77,13 +101,13 @@
                 clearInterval(countdown);
                 isRunning = false;
                 document.getElementById('startPause').textContent = '开始';
-            } 
+            }
             else {
                 const hours = parseInt(document.getElementById('inputHours').value) || 0;
                 const minutes = parseInt(document.getElementById('inputMinutes').value) || 0;
                 const seconds = parseInt(document.getElementById('inputSeconds').value) || 0;
                 // 保证倒计时只在最开始设置时改变，暂停后不会重新设置倒计时
-                if (time === 0){
+                if (time === 0) {
                     time = hours * 3600 + minutes * 60 + seconds;
                 }
                 if (time > 0) {

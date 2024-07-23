@@ -174,7 +174,25 @@
             userSetSeconds = e.data.seconds;
             console.log("当前日期：" + userSetYear + ":" + userSetMonth + ":" + userSetDay);
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            setDefaultDate();
+        });
 
+        function setDefaultDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            // JavaScript月份从0开始，所以加1
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+
+            // 如果月份和日期小于10，前面添加0
+            const formattedMonth = month < 10 ? `0${month}` : month;
+            const formattedDay = day < 10 ? `0${day}` : day;
+
+            document.getElementById('alarmYear').value = year;
+            document.getElementById('alarmMonth').value = formattedMonth;
+            document.getElementById('alarmDay').value = formattedDay;
+        }
     </script>
 </body>
 
