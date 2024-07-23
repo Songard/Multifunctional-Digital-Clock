@@ -6,20 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-<<<<<<< HEAD
-        .body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        /* 表盘大小 */
-        #clock {
-            width: 300px;
-            height: 300px;
-        }
-=======
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #f4f4f4;
@@ -55,91 +41,75 @@
     #minute-hand { stroke: #666; }
     #second-hand { stroke: #ff6347; }
 
-    
     /* 表盘上的刻度数字 */
     .number {
         font-family: Arial, sans-serif;
         font-size: 20px;
         text-anchor: middle;
     }
->>>>>>> d4c601b335fd3261d0ebf05bc92bfab08c8588fb
 
-        /* 表盘上的刻度数字 */
-        .number {
-            font-family: Arial, sans-serif;
-            font-size: 20px;
-            text-anchor: middle;
-        }
+    /* 数字时间显示 */
+    #timeDisplay {
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
 
-        /* 数字时间显示 */
-        #timeDisplay {
-            font-family: Arial, sans-serif;
-            font-size: 24px;
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 300px;
-            text-align: center;
-        }
+    #timeInput {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
 
-        #timeInput {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-        }
+    #timeInput input {
+        width: 50px;
+        text-align: center;
+        margin: 0 5px;
+    }
 
-        #timeInput input {
-            width: 50px;
-            text-align: center;
-            margin: 0 5px;
-        }
+    #setTimeButton {
+        margin-left: 10px;
+    }
 
-        #setTimeButton {
-            margin-left: 10px;
-        }
+    #currentTimeButton {
+        margin-top: 10px;
+    }
 
-        #currentTimeButton {
-            margin-top: 10px;
-        }
+    /* 日期显示 */
+    #dateDisplay {
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+        margin-top: 10px;
+    }
 
-        /* 日期显示 */
-        #dateDisplay {
-            font-family: Arial, sans-serif;
-            font-size: 24px;
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 300px;
-            text-align: center;
-            margin-top: 10px;
-        }
+    #dateInput {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
 
-        #dateInput {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-        }
+    #dateInput input {
+        width: 70px;
+        text-align: center;
+        margin: 0 5px;
+    }
 
-        #dateInput input {
-            width: 70px;
-            text-align: center;
-            margin: 0 5px;
-        }
-
-        #setDateButton {
-            margin-left: 10px;
-        }
+    #setDateButton {
+        margin-left: 10px;
+    }
 
 
-<<<<<<< HEAD
-        #hour-hand,
-        #minute-hand,
-        #second-hand {
-            cursor: pointer;
-        }
-=======
     #hour-hand, #minute-hand, #second-hand {
         cursor: pointer;
     }
@@ -170,7 +140,6 @@
     user-select: none;
     }
 
->>>>>>> d4c601b335fd3261d0ebf05bc92bfab08c8588fb
     </style>
 </head>
 
@@ -178,11 +147,7 @@
     <!-- 利用SVG画图实现的表盘时钟，需注意中心点统一 -->
     <svg id="clock" width="300px" height="300px" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet">
         <!-- 表盘 -->
-<<<<<<< HEAD
-        <circle id="clock-face" cx="150" cy="150" r="140" stroke="black" stroke-width="2" fill="lightblue" />
-=======
         <circle id="clock-face" cx="150" cy="150" r="140" stroke="black" stroke-width="2" fill="lightgray" />
->>>>>>> d4c601b335fd3261d0ebf05bc92bfab08c8588fb
         <!-- 时针，分针，秒针 -->
         <line x1="150" y1="150" x2="150" y2="70" stroke="black" stroke-width="5" id="hour-hand" />
         <line x1="150" y1="150" x2="150" y2="50" stroke="black" stroke-width="3" id="minute-hand" />
