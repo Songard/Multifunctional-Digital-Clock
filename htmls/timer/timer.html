@@ -35,7 +35,7 @@
             margin-top: 175px;
             position: relative;
             top: 20px;
-            left: 20px;
+
         }
 
         input[type="number"] {
@@ -58,12 +58,12 @@
             /* 给按钮添加圆角 */
             color: black;
             /* 设置按钮文字的颜色 */
-            background-color: rgb(229, 229, 229);
+            background-color: rgb(239, 239, 239);
             /* 设置按钮的背景颜色 */
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: rgb(229, 229, 229);
             /* 鼠标悬停时改变按钮的背景颜色 */
         }
     </style>
@@ -106,6 +106,7 @@
                 const hours = parseInt(document.getElementById('inputHours').value) || 0;
                 const minutes = parseInt(document.getElementById('inputMinutes').value) || 0;
                 const seconds = parseInt(document.getElementById('inputSeconds').value) || 0;
+
                 // 保证倒计时只在最开始设置时改变，暂停后不会重新设置倒计时
                 if (time === 0) {
                     time = hours * 3600 + minutes * 60 + seconds;
@@ -144,6 +145,11 @@
             isRunning = false;
             document.getElementById('timer').textContent = '00:00:00';
             document.getElementById('startPause').textContent = '开始';
+            time = 0;
+            document.getElementById('inputHours').value = 0;
+            document.getElementById('inputMinutes').value = 0;
+            document.getElementById('inputSeconds').value = 0;
+            timer.style.color = 'black'; // 将文本颜色恢复为黑色
         }
 
         function updateTimerDisplay(seconds) {
