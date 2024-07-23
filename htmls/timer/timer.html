@@ -115,6 +115,9 @@
                     isRunning = true;
                     document.getElementById('startPause').textContent = '暂停';
                     updateTimerDisplay(time); // 最开始更新显示时间，否则最开始一秒会显示0
+                    if (time <= 5){
+                        timer.style.color = 'red'; // 剩余时间小于或等于5秒时，将文本颜色设置为红色
+                    }
                     countdown = setInterval(() => {
                         time--;
                         updateTimerDisplay(time);
