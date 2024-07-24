@@ -22,7 +22,22 @@
     padding: 14px 16px;
     text-decoration: none;
 }
+.navbar b {
+    float: left;
+    flex: 1;
+    display: block;
+    color: #000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    background-color: #f4f4f4;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: 'bold';
+}
 .navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+.navbar b:hover {
     background-color: #ddd;
     color: black;
 }
