@@ -81,6 +81,8 @@
             <audio id="alarm-sound" src="alarm.mp3" preload="auto"></audio>
         </div>
     </div>
+    <!-- 信息显示 -->
+    <div id="alertMessage" style="color: red; margin-top: 10px; text-align: center;"></div>
 
     <script>
         var userSetYear = 0;
@@ -108,48 +110,52 @@
 
             // 验证输入的时间是否有效
             if (!((alarmYear >= 1900 && alarmYear <= 2100) && (alarmMonth >= 1 && alarmMonth <= 12) && (alarmDay >= 1 && alarmDay <= [31, ((alarmYear % 4 === 0 && alarmYear % 100 !== 0) || (alarmYear % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][alarmMonth - 1]))) {
-                alert("输入的日期无效，请输入正确的日期！");
+                alertMessage.textContent = '请输入正确的时间';
                 alarmYear = 0;
                 alarmMonth = 0;
                 alarmDay = 0;
                 return; // 阻止闹钟设置
             }
-
+            // 清除错误消息
+            alertMessage.textContent = '';
             if (alarmHour < 0 || alarmHour >= 24 || alarmMinute < 0 || alarmMinute >= 60 || alarmSecond < 0 || alarmSecond >= 60) {
-                alert("输入的时间无效，请输入正确的时间！");
+                alertMessage.textContent = '请输入正确的时间';
                 alarmHour = 0;
                 alarmMinute = 0;
                 alarmSecond = 0;
                 return; // 阻止闹钟设置
             }
-            if (alarmYear < userSetYear || (alarmYear === userSetYear && alarmMonth < userSetMonth) ||
-                (alarmYear === userSetYear && alarmMonth === userSetMonth && alarmDay < userSetDay) ||
-                (alarmYear === userSetYear && alarmMonth === userSetMonth && alarmDay === userSetDay && alarmHour < userSetHours) ||
-                (alarmYear === userSetYear && alarmMonth === userSetMonth && alarmDay === userSetDay && alarmHour === userSetHours && alarmMinute < userSetMinutes)) {
-                alert("不能设置过去的闹钟时间，请重新设置"); // 弹窗提示
+            // 清除错误消息
+            alertMessage.textContent = '';
+            if (alarmYear < userSetYear ||
+                (Math.abs(alarmYear - userSetYear) < 0.0001 && alarmMonth < userSetMonth) ||
+                (Math.abs(alarmYear - userSetYear) < 0.0001 && Math.abs(alarmMonth - userSetMonth) < 0.0001 && alarmDay < userSetDay) ||
+                (Math.abs(alarmYear - userSetYear) < 0.0001 && Math.abs(alarmMonth - userSetMonth) < 0.0001 && Math.abs(alarmDay - userSetDay) < 0.0001 && alarmHour < userSetHours) ||
+                (Math.abs(alarmYear - userSetYear) < 0.0001 && Math.abs(alarmMonth - userSetMonth) < 0.0001 && Math.abs(alarmDay - userSetDay) < 0.0001 && Math.abs(alarmHour - userSetHours) < 0.0001 && alarmMinute < userSetMinutes)) {
+                alertMessage.textContent = "不能设置过去的闹钟时间，请重新设置";
                 return; // 阻止闹钟设置
             }
-            alert("闹钟设置成功！");
+            alertMessage.textContent = "闹钟设置成功！";
             checkAlarm();
         }
 
         function checkAlarm() {
             clockInterval = setInterval(function () {
 
-                if (userSetDay >= alarmDay && userSetMonth >= alarmMonth && userSetYear >= alarmYear && userSetHours >= alarmHour && userSetMinutes >= alarmMinute && userSetSeconds >= alarmSecond) {
+                if (userSetDay >= alarmDay && userSetMonth >= alarmMonth && userSetYear >= alarmYear && userSetHours >= alarmHour && userSetMinutes >= alarmMinute) {
                     clearInterval(clockInterval); // 停止检查
                     document.getElementById('alarm-sound').play(); // 播放音频
-                    alert("时间到！"); // 弹窗提示
+                    alertMessage.textContent = "时间到！";
                 }
             }, 1000);
         }
 
         document.getElementById('cancelAlarm').addEventListener('click', function () {
             clearInterval(clockInterval); // 停止定时器
-            alarmHour = 0; // 可选：重置闹钟时间
-            alarmMinute = 0; // 可选：重置闹钟时间
-            alarmSecond = 0; // 可选：重置闹钟时间
-            alert("闹钟已取消！");
+            alarmHour = 0;
+            alarmMinute = 0;
+            alarmSecond = 0;
+            alertMessage.textContent = "闹钟已取消！";
         });
 
         // 由于使用iframe将表盘与页面分离，
