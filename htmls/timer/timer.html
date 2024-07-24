@@ -12,6 +12,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            background-color: #f4f4f4;
         }
 
         .timer {
@@ -73,10 +74,11 @@
     <div class="top">
         <div class="navbar">
             <div class="navbar_inner">
+                <a href="../../index.html">首页</a>
                 <a href="../world_clock/world_clock.html">世界时钟</a>
                 <a href="../alarm/alarm.html">闹钟</a>
-                <a href="../stopwatch/stopwatch.html">计时器</a>
-                <a href="timer.html">秒表</a>
+                <a href="../stopwatch/stopwatch.html">秒表</a>
+                <b href="timer.html">计时器</b>
             </div>
         </div>
     </div>
@@ -115,6 +117,9 @@
                     isRunning = true;
                     document.getElementById('startPause').textContent = '暂停';
                     updateTimerDisplay(time); // 最开始更新显示时间，否则最开始一秒会显示0
+                    if (time <= 5){
+                        timer.style.color = 'red'; // 剩余时间小于或等于5秒时，将文本颜色设置为红色
+                    }
                     countdown = setInterval(() => {
                         time--;
                         updateTimerDisplay(time);
