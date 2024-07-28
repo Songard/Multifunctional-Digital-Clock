@@ -15,6 +15,7 @@
             background-color: #f4f4f4;
         }
 
+        /* 计时器的样式 */
         .timer {
             display: flex;
             justify-content: center;
@@ -23,6 +24,7 @@
 
         }
 
+        /* 顶部导航栏的样式 */
         .top {
             display: flex;
             justify-content: center;
@@ -31,6 +33,7 @@
             width: 100%;
         }
 
+        /* 计时器的样式 */
         #timer {
             font-size: 80px;
             margin-top: 175px;
@@ -39,18 +42,18 @@
 
         }
 
+        /* 输入框 */
         input[type="number"] {
             width: 100px;
             font-size: 30px;
         }
 
+        /* 按钮的样式 */
         button {
             font-size: 18px;
-            /* 增加按钮内文字的大小 */
             padding: 8px 20px;
-            /* 增加按钮的内边距，第一个值是上下，第二个值是左右 */
             margin: 10px;
-            /* 增加按钮之间的间距 */
+            /* 设定按钮之间的间距 */
             cursor: pointer;
             /* 改善按钮的点击体验 */
             border: none;
@@ -61,6 +64,7 @@
             /* 设置按钮文字的颜色 */
             background-color: rgb(239, 239, 239);
             /* 设置按钮的背景颜色 */
+
         }
 
         button:hover {
@@ -97,7 +101,7 @@
         let countdown;
         let isRunning = false;
         var time = 0;
-
+        // 处理计时器的运行和暂停
         function startPauseTimer() {
             if (isRunning) {
                 clearInterval(countdown);
@@ -117,7 +121,7 @@
                     isRunning = true;
                     document.getElementById('startPause').textContent = '暂停';
                     updateTimerDisplay(time); // 最开始更新显示时间，否则最开始一秒会显示0
-                    if (time <= 5){
+                    if (time <= 5) {
                         timer.style.color = 'red'; // 剩余时间小于或等于5秒时，将文本颜色设置为红色
                     }
                     countdown = setInterval(() => {
@@ -134,7 +138,7 @@
                             document.getElementById('alarm-sound').play(); // 播放音频
                             document.getElementById('startPause').textContent = '开始';
                             isRunning = false;
-                            time = 0;
+                            time = 0; // 置零
                             timer.style.color = 'black'; // 将文本颜色恢复为黑色
                             setTimeout(() => {
                                 alert('时间到！');
@@ -144,7 +148,7 @@
                 }
             }
         }
-
+        // 重置计时器       
         function resetTimer() {
             clearInterval(countdown);
             isRunning = false;
@@ -156,7 +160,7 @@
             document.getElementById('inputSeconds').value = 0;
             timer.style.color = 'black'; // 将文本颜色恢复为黑色
         }
-
+        // 更新计时器显示
         function updateTimerDisplay(seconds) {
             const hours = Math.floor(seconds / 3600);
             const minutes = Math.floor((seconds % 3600) / 60);
@@ -164,11 +168,11 @@
             document.getElementById('timer').textContent =
                 `${pad(hours)}:${pad(minutes)}:${pad(remainingSeconds)}`;
         }
-
+        // 补零
         function pad(number) {
             return number < 10 ? '0' + number : number;
         }
-
+        // 开始/暂停计时器
         document.getElementById('startPause').addEventListener('click', startPauseTimer);
         document.getElementById('reset').addEventListener('click', resetTimer);
     </script>

@@ -17,6 +17,7 @@
             background-color: #f4f4f4;
         }
 
+        /* 顶部导航栏的样式 */
         .top {
             display: flex;
             justify-content: center;
@@ -32,6 +33,7 @@
             flex-direction: column;
         }
 
+        /* 闹钟的样式 */
         .alarm {
             display: flex;
             justify-content: center;
@@ -39,6 +41,7 @@
             flex-direction: column;
         }
 
+        /* 输入框 */
         .setAlarm {
             display: flex;
             justify-content: center;
@@ -77,7 +80,6 @@
             <input id="alarmDay" type="number" placeholder="DD" min="1" max="31">
             <input id="alarmHours" type="number" placeholder="HH" min="0" max="23">
             <input id="alarmMinutes" type="number" placeholder="MM" min="0" max="59">
-            <!--<input id="alarmSeconds" type="number" placeholder="秒" min="0" max="59">-->
             <button onclick="setAlarm()">设置闹钟</button>
             <button id="cancelAlarm">取消闹钟</button>
             <audio id="alarm-sound" src="alarm.mp3" preload="auto"></audio>
@@ -87,19 +89,21 @@
     <div id="alertMessage" style="color: red; margin-top: 10px; text-align: center;"></div>
 
     <script>
+        // 当前时间
         var userSetYear = 0;
         var userSetMonth = 0;
         var userSetDay = 0;
         var userSetHours = 0;
         var userSetMinutes = 0;
         var userSetSeconds = 0;
-
+        // 用户设置的闹钟时间
         var alarmHour = 0;
         var alarmMinute = 0;
         var alarmSecond = 0;
         var alarmYear = 0;
         var alarmMonth = 0;
         var alarmDay = 0;
+
         var clockInterval; // 定义一个变量来存储定时器的ID
 
         function setAlarm() {
@@ -113,22 +117,22 @@
             // 验证输入的时间是否有效
             if (!((alarmYear >= 1900 && alarmYear <= 2100) && (alarmMonth >= 1 && alarmMonth <= 12) && (alarmDay >= 1 && alarmDay <= [31, ((alarmYear % 4 === 0 && alarmYear % 100 !== 0) || (alarmYear % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][alarmMonth - 1]))) {
                 alertMessage.textContent = '请输入正确的时间';
+                // 重置
                 alarmYear = 0;
                 alarmMonth = 0;
                 alarmDay = 0;
                 return; // 阻止闹钟设置
             }
-            // 清除错误消息
-            alertMessage.textContent = '';
+            alertMessage.textContent = '';// 清除错误消息
             if (alarmHour < 0 || alarmHour >= 24 || alarmMinute < 0 || alarmMinute >= 60 || alarmSecond < 0 || alarmSecond >= 60) {
                 alertMessage.textContent = '请输入正确的时间';
+                // 重置
                 alarmHour = 0;
                 alarmMinute = 0;
                 alarmSecond = 0;
                 return; // 阻止闹钟设置
             }
-            // 清除错误消息
-            alertMessage.textContent = '';
+            alertMessage.textContent = '';// 清除错误消息
             if (alarmYear < userSetYear ||
                 (Math.abs(alarmYear - userSetYear) < 0.0001 && alarmMonth < userSetMonth) ||
                 (Math.abs(alarmYear - userSetYear) < 0.0001 && Math.abs(alarmMonth - userSetMonth) < 0.0001 && alarmDay < userSetDay) ||
@@ -143,8 +147,8 @@
 
         function checkAlarm() {
             clockInterval = setInterval(function () {
-
-                if (userSetDay >= alarmDay && userSetMonth >= alarmMonth && userSetYear >= alarmYear && userSetHours >= alarmHour && userSetMinutes >= alarmMinute) {
+                if (userSetDay >= alarmDay && userSetMonth >= alarmMonth && userSetYear >= alarmYear
+                    && userSetHours >= alarmHour && userSetMinutes >= alarmMinute) {
                     clearInterval(clockInterval); // 停止检查
                     document.getElementById('alarm-sound').play(); // 播放音频
                     alertMessage.textContent = "时间到！";
@@ -154,6 +158,7 @@
 
         document.getElementById('cancelAlarm').addEventListener('click', function () {
             clearInterval(clockInterval); // 停止定时器
+            // 重置
             alarmHour = 0;
             alarmMinute = 0;
             alarmSecond = 0;
@@ -185,7 +190,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             setDefaultDate();
         });
-
+        // 设置默认日期为当前日期
         function setDefaultDate() {
             const now = new Date();
             const year = now.getFullYear();

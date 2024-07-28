@@ -14,6 +14,7 @@
             background-color: #f4f4f4;
         }
 
+        /* 秒表的样式 */
         .stopwatch {
             display: flex;
             justify-content: center;
@@ -22,6 +23,7 @@
             flex-direction: column;
         }
 
+        /* 顶部导航栏的样式 */
         .top {
             display: flex;
             justify-content: center;
@@ -30,22 +32,23 @@
             width: 100%;
         }
 
+        /* 秒表的样式 */
         #stopwatch {
             font-size: 60px;
             margin-bottom: 20px;
         }
 
+        /* 记录框的样式 */
         #records {
             height: 300px;
             font-size: 24px;
             white-space: pre-wrap;
             max-height: 190px;
-            /* 5条记录的高度，根据实际情况调整 */
             overflow-y: auto;
-            /* 当内容超出高度时显示滚动条 */
             margin-bottom: 20px;
         }
 
+        /* 按钮的样式 */
         button {
             width: 100px;
             height: 50px;
@@ -84,7 +87,7 @@
         var recordsText = "";// 用于记录所有记录时间的字符串
         let cnt_record = 0;// 记录记录的次数
 
-
+        // 将时间转换为字符串
         function timeToString(time) {
             let diffInHrs = time / 3600000;
             let hh = Math.floor(diffInHrs);
@@ -105,30 +108,29 @@
 
             return `${formattedHH}:${formattedMM}:${formattedSS}.${formattedMS}`;
         }
-
+        // 将时间字符串打印到页面上
         function print(txt) {
             document.getElementById("stopwatch").innerHTML = txt;
         }
-
+        // 开始计时
         function start() {
             startTime = Date.now() - elapsedTime;
             timerInterval = requestAnimationFrame(updateTimer);
             running = true;
-
             document.getElementById("toggle").textContent = "暂停";
 
         }
-
+        // 暂停计时
         function pause() {
             elapsedTime = Date.now() - startTime;
             cancelAnimationFrame(timerInterval);
             running = false;
             document.getElementById("toggle").textContent = "开始";
         }
-
+        // 重置计时器
         function reset() {
             clearInterval(timerInterval);
-            print("00:00:00.000");
+            print("00:00:00.000");// 清零
             elapsedTime = 0;
             running = false;
             document.getElementById("toggle").textContent = "开始";
@@ -136,13 +138,13 @@
             document.getElementById("records").textContent = recordsText; // 更新固定框的内容
             cnt_record = 0;
         }
-
+        // 记录时间
         function updateTimer() {
             elapsedTime = Date.now() - startTime;
             print(timeToString(elapsedTime));
             timerInterval = requestAnimationFrame(updateTimer);
         }
-
+        // 复位键处理
         document.getElementById("reset").addEventListener("click", function () {
             // 停止当前的计时器（如果有的话）
             if (timerInterval) {
@@ -159,7 +161,7 @@
             document.getElementById("records").textContent = recordsText; // 更新固定框的内容
             cnt_record = 0;
         });
-
+        // 开始/暂停键处理
         document.getElementById("toggle").addEventListener("click", function () {
             if (!running) {
                 // 如果当前未运行，则开始计时
@@ -170,15 +172,19 @@
                 }, 10);
                 running = true;
                 this.textContent = "暂停";
-            } else {
+            }
+            else {
                 // 如果当前正在运行，则暂停计时
                 clearInterval(timerInterval);
                 running = false;
                 this.textContent = "开始";
             }
         });
+        // 记录键处理
         document.getElementById("recordBtn").addEventListener("click", function () {
-            if (!running) alert("计时器未运行，无法记录时间"); // 如果计时器未运行，则报错
+            if (!running) {
+                alert("计时器未运行，无法记录时间"); // 如果计时器未运行，则报错
+            }
             else {
                 const currentTime = timeToString(elapsedTime);
                 var currentRecord = currentTime; // 或者是 currentTime 变量
