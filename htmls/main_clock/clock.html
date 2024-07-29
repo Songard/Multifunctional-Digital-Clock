@@ -33,10 +33,6 @@
         width: 300px;
     }
 
-    #line-hand {
-        stroke-linecap: round;
-    }
-
     #hour-hand { stroke: #333; }
     #minute-hand { stroke: #666; }
     #second-hand { stroke: #ff6347; }
@@ -76,9 +72,6 @@
         margin-left: 10px;
     }
 
-    #currentTimeButton {
-        margin-top: 10px;
-    }
 
     /* 日期显示 */
     #dateDisplay {
@@ -141,6 +134,7 @@
     }
 
     </style>
+    <title></title>
 </head>
 
 <body class="body">
@@ -383,8 +377,7 @@
             userSetDay = day;
 
             var dateDisplay = document.getElementById('dateDisplay');
-            var formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-            dateDisplay.textContent = formattedDate;
+            dateDisplay.textContent = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
         }
 
         // 初始化时钟和日期
@@ -423,10 +416,8 @@
                 }
                 // 检查每个月的天数
                 var daysInMonth = [31, (isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-                if (day < 1 || day > daysInMonth[month - 1]) {
-                    return false;
-                }
-                return true;
+                return !(day < 1 || day > daysInMonth[month - 1]);
+
             }
 
             // 判断是否是闰年
@@ -465,7 +456,7 @@
                 var currentAngle = getAngle(event.clientX - rect.left, event.clientY - rect.top);
                 var deltaAngle = currentAngle - startAngle;
                 if (deltaAngle < -180) deltaAngle += 360;
-                if (deltaAngle > 180) deltaAngle -= 360;
+                if (deltaAngle > 180)
 
                 if (element.id === 'hour-hand') {
                     if (startAngle > 270 && currentAngle < 90) {
@@ -565,8 +556,7 @@
 
             // 更新时间显示
             var timeDisplay = document.getElementById('timeDisplay');
-            var formattedTime = `${userSetHours.toString().padStart(2, '0')}:${userSetMinutes.toString().padStart(2, '0')}:${Math.floor(userSetSeconds).toString().padStart(2, '0')}`;
-            timeDisplay.textContent = formattedTime;
+            timeDisplay.textContent = `${userSetHours.toString().padStart(2, '0')}:${userSetMinutes.toString().padStart(2, '0')}:${Math.floor(userSetSeconds).toString().padStart(2, '0')}`;
         }
 
         function getAngle(x, y) {
@@ -576,31 +566,6 @@
             return (angle + 90 + 360) % 360; // 90度偏移是debug出来的，推断是坐标原点对应坐标计算方式导致
         }
 
-        function updateHandTime(element, startTime, deltaAngle) {
-            var hours = startTime.hours;
-            var minutes = startTime.minutes;
-            var seconds = startTime.seconds;
-
-            if (element.id === 'hour-hand') {
-                var deltaHours = deltaAngle / 30;
-                hours = (startTime.hours + deltaHours) % 24;
-                if (hours < 0) hours += 24;
-            } else if (element.id === 'minute-hand') {
-                var deltaMinutes = deltaAngle / 6;
-                minutes = (startTime.minutes + deltaMinutes) % 60;
-                if (minutes < 0) minutes += 60;
-            } else if (element.id === 'second-hand') {
-                var deltaSeconds = deltaAngle / 6;
-                seconds = (startTime.seconds + deltaSeconds) % 60;
-                if (seconds < 0) seconds += 60;
-            }
-
-            hours = Math.floor(hours);
-            minutes = Math.floor(minutes);
-            seconds = Math.floor(seconds);
-
-            updateClock(hours, minutes, seconds);
-        }
 
         // 表盘提供一个接口，用于获取当前时间
         // 通过postMessage进行页面间通信,获取时间方式参考htmls/alarm/alarm.html

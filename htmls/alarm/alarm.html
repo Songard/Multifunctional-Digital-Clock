@@ -41,13 +41,6 @@
             flex-direction: column;
         }
 
-        /* 输入框 */
-        .setAlarm {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: row;
-        }
     </style>
 
 </head>
@@ -90,21 +83,21 @@
 
     <script>
         // 当前时间
-        var userSetYear = 0;
-        var userSetMonth = 0;
-        var userSetDay = 0;
-        var userSetHours = 0;
-        var userSetMinutes = 0;
-        var userSetSeconds = 0;
+        let userSetYear = 0;
+        let userSetMonth = 0;
+        let userSetDay = 0;
+        let userSetHours = 0;
+        let userSetMinutes = 0;
+        let userSetSeconds = 0;
         // 用户设置的闹钟时间
-        var alarmHour = 0;
-        var alarmMinute = 0;
-        var alarmSecond = 0;
-        var alarmYear = 0;
-        var alarmMonth = 0;
-        var alarmDay = 0;
+        let alarmHour = 0;
+        let alarmMinute = 0;
+        let alarmSecond = 0;
+        let alarmYear = 0;
+        let alarmMonth = 0;
+        let alarmDay = 0;
 
-        var clockInterval; // 定义一个变量来存储定时器的ID
+        let clockInterval; // 定义一个变量来存储定时器的ID
 
         function setAlarm() {
             //alert("开始闹钟设置！");
@@ -168,7 +161,7 @@
         // 由于使用iframe将表盘与页面分离，
         // 因此获取表盘时间改为使用postMessage进行页面间通信
         // 提取表盘iframe
-        var iframe = document.getElementById('dial');
+        let iframe = document.getElementById('dial');
         // 当表盘加载完成后，每隔一小段时间，向表盘页面发送时间请求
         iframe.onload = function () {
             setInterval(function () {

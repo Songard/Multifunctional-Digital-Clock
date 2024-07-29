@@ -84,7 +84,7 @@
         let elapsedTime = 0;
         let timerInterval;
         let running = false;
-        var recordsText = "";// 用于记录所有记录时间的字符串
+        let recordsText = "";// 用于记录所有记录时间的字符串
         let cnt_record = 0;// 记录记录的次数
 
         // 将时间转换为字符串
@@ -112,38 +112,12 @@
         function print(txt) {
             document.getElementById("stopwatch").innerHTML = txt;
         }
-        // 开始计时
-        function start() {
-            startTime = Date.now() - elapsedTime;
-            timerInterval = requestAnimationFrame(updateTimer);
-            running = true;
-            document.getElementById("toggle").textContent = "暂停";
 
-        }
         // 暂停计时
-        function pause() {
-            elapsedTime = Date.now() - startTime;
-            cancelAnimationFrame(timerInterval);
-            running = false;
-            document.getElementById("toggle").textContent = "开始";
-        }
-        // 重置计时器
-        function reset() {
-            clearInterval(timerInterval);
-            print("00:00:00.000");// 清零
-            elapsedTime = 0;
-            running = false;
-            document.getElementById("toggle").textContent = "开始";
-            recordsText = "";// 清除记录
-            document.getElementById("records").textContent = recordsText; // 更新固定框的内容
-            cnt_record = 0;
-        }
+
+
         // 记录时间
-        function updateTimer() {
-            elapsedTime = Date.now() - startTime;
-            print(timeToString(elapsedTime));
-            timerInterval = requestAnimationFrame(updateTimer);
-        }
+
         // 复位键处理
         document.getElementById("reset").addEventListener("click", function () {
             // 停止当前的计时器（如果有的话）
@@ -186,8 +160,7 @@
                 alert("计时器未运行，无法记录时间"); // 如果计时器未运行，则报错
             }
             else {
-                const currentTime = timeToString(elapsedTime);
-                var currentRecord = currentTime; // 或者是 currentTime 变量
+                let currentRecord = timeToString(elapsedTime); // 或者是 currentTime 变量
                 recordsText += "\n" + currentRecord;// 将新记录添加到记录字符串中           
                 document.getElementById("records").textContent = recordsText; // 更新内容
                 cnt_record++;
