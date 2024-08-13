@@ -1,6 +1,6 @@
 # Multifunctional-Digital-Clock
 
-[CN](asset\\Readme_cn.md) | [EN](README.md)
+[CN](asset/Readme_cn.md) | [EN](README.md)
 
 ## Introduction
 
