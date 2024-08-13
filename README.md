@@ -1,6 +1,6 @@
 # Multifunctional-Digital-Clock
 
-[CN](asset\Readme_cn.md) | [EN](README.md)
+[CN](asset\\Readme_cn.md) | [EN](README.md)
 
 ## Introduction
 
@@ -37,7 +37,7 @@
 1. Clone the repository to your local machine:
 
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/Songard/Multifunctional-Digital-Clock.git
    ```
 
 2. Navigate to the project directory:
